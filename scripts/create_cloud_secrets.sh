@@ -20,8 +20,16 @@ set -e
 
 namespace="plc"
 
+if [ "$#" -ne 2 ]; then
+  echo "This script requires exactly one argument: <cloud domain> <env>"
+  exit 1
+fi
+
 export LANG=C
 export LC_ALL=C
+
+CLOUD_DOMAIN="$1"
+ENVIRONMENT="$2"
 
 kubectl create secret generic -n "${namespace}" \
   cloud-auth-secrets \
@@ -100,7 +108,7 @@ PROXY_KEY_FILE="${PROXY_TLS_CERTS}/server.key"
 mkcert \
   -cert-file "${PROXY_CERT_FILE}" \
   -key-file "${PROXY_KEY_FILE}" \
-  dev.withpixie.dev "*.dev.withpixie.dev" localhost 127.0.0.1 ::1
+  "${ENVIRONMENT}.${CLOUD_DOMAIN}" "*.${ENVIRONMENT}.${CLOUD_DOMAIN}" localhost 127.0.0.1 ::1
 
 kubectl create secret tls -n "${namespace}" \
   cloud-proxy-tls-certs \
