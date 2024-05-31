@@ -18,8 +18,6 @@
 
 set -e
 
-namespace="plc"
-
 if [ "$#" -ne 2 ]; then
   echo "This script requires exactly one argument: <cloud domain> <env>"
   exit 1
@@ -30,6 +28,8 @@ export LC_ALL=C
 
 CLOUD_DOMAIN="$1"
 ENVIRONMENT="$2"
+namespace="plc-${ENVIRONMENT}"
+
 
 kubectl create secret generic -n "${namespace}" \
   cloud-auth-secrets \
