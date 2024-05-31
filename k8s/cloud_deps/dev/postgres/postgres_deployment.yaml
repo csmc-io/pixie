@@ -23,7 +23,10 @@ spec:
         - name: POSTGRES_USER
           value: pl
         - name: POSTGRES_PASSWORD
-          value: pl
+          valueFrom:
+            secretKeyRef:
+              key: PL_POSTGRES_PASSWORD
+              name: pl-db-secrets
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           subPath: data
