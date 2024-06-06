@@ -17,7 +17,7 @@ spec:
   subject:
     organizations:
     - Cosmic
-  serialNumber: "1"
+    serialNumber: "1"
   secretName: root-secret
   privateKey:
     algorithm: ECDSA
@@ -43,9 +43,9 @@ metadata:
   name: service-tls-certs
   namespace: plc-testing
 spec:
-  secretName: service-tls-certs
+  secretName: service-tls-certs-test
   issuerRef:
-    name: testing-getcosmic-ai-issuer
+    name: cosmic-ca-issuer
   dnsNames:
   - '*.plc-testing'
   - '*.plc-testing.svc.cluster.local'
