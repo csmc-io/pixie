@@ -6,7 +6,7 @@ metadata:
   annotations:
     cloud.google.com/app-protocols: '{"tcp-http2":"HTTP2"}'
     beta.cloud.google.com/backend-config: '{"ports": {"51600":"vzconn-backend-config"}}'
-    cloud.google.com/load-balancer-type: internal
+    cloud.google.com/load-balancer-type: external
 spec:
   type: NodePort
   ports:

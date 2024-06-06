@@ -4,8 +4,14 @@ kind: BackendConfig
 metadata:
   name: cloud-proxy-backend-config
 spec:
+  securityPolicy:
+    name: pixie-cloud-testing-ingress-policy
   timeoutSec: 3600
   connectionDraining:
     drainingTimeoutSec: 60
   cdn:
-    enabled: false
+    enabled: true
+    cachePolicy:
+      includeHost: true
+      includeProtocol: true
+      includeQueryString: true
