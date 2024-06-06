@@ -1,0 +1,43 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: plc-testing
+resources:
+# # - frontend_config.yaml
+# - cloud_ingress_managed_cert.yaml
+# - cloud_ingress_managed_cert_noslackin.yaml
+# - cloud_proxy_backend_config.yaml
+# - vzconn_backend_config.yaml
+# - ../base
+# - ../overlays/exposed_services_gclb
+- ../../k8s/cloud/testing
+patches:
+- path: db_sidecar.yaml
+  target:
+    kind: Deployment
+    labelSelector: db=pgsql
+- path: proxy_service.yaml
+  target:
+    kind: Service
+    name: cloud-proxy-service
+- path: cloud_ingress.yaml
+  target:
+    kind: Ingress
+    name: cloud-ingress
+# - bq_config.yaml
+# - support_access_config.yaml
+# - analytics_config.yaml
+# - contact_config.yaml
+# - db_config.yaml
+# - indexer_config.yaml
+# - service_config.yaml
+# - domain_config.yaml
+# - cloud_ingress_ip.yaml
+# - script_bundles_config.yaml
+# - proxy_envoy.yaml
+# - auth_deployment.yaml
+# patches:
+# - path: db_sidecar.yaml
+#   target:
+#     kind: Deployment
+#     labelSelector: db=pgsql
