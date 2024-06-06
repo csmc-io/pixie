@@ -43,9 +43,26 @@ kubectl create secret generic -n "${namespace}" \
 
 kubectl create secret generic -n "${namespace}" \
   pl-db-secrets \
-  --from-literal=PL_POSTGRES_USERNAME="pl" \
+  --from-literal=PL_POSTGRES_USERNAME="cosmic-dev-db-sa@csmc-dev.iam.gserviceaccount.com" \
   --from-literal=PL_POSTGRES_PASSWORD="$(< /dev/urandom tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1)" \
-  --from-literal=database-key="$(< /dev/urandom tr -dc 'a-zA-Z0-9#$%&().' | fold -w 24 | head -n 1)"
+  --from-literal=database-key="$(< /dev/urandom tr -dc 'a-zA-Z0-9#$%&().' | fold -w 24 | head -n 1)" \
+  --from-file=db_service_account.json
+
+kubectl -n plc-testing create secret generic bq-access-sa --from-file=bq.client.default.credentials_file
+
+kubectl -n plc-testing create secret generic cert-manager-dns01-solver-svc-acct --from-file=key.json
+
+# I believe this is extraneous from using a non let's encrypt cert
+kubectl -n plc-testing create secret generic pl-ssl-cert --cert=server.crt --key=server.key
+
+# Step 7 from https://docs.px.dev/reference/admin/authentication
+kubectl create secret generic -n "${namespace}" \
+  cloud-auth0-secrets \
+  --from-literal=auth0-client-id="<client_id>" \
+  --from-literal=auth0-client-secret="<client_secret>"
+
+# kubectl create secret generic -n "${namespace}" \
+#   pl-db-secrets \
 
 kubectl create secret generic -n "${namespace}" \
   cloud-session-secrets \

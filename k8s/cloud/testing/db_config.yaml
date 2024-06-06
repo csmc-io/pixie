@@ -10,4 +10,4 @@ data:
   PL_POSTGRES_HOSTNAME: localhost
   PL_POSTGRES_PORT: "5432"
   PL_POSTGRES_DB: pl_testing
-  PL_POSTGRES_INSTANCE: pl-pixies:us-west1:pixie-cloud-testing-db-pg13
+  PL_POSTGRES_INSTANCE: csmc-dev:us-west1:testing-cloud-db

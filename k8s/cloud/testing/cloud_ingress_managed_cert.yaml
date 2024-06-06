@@ -5,6 +5,6 @@ metadata:
   name: cloud-ingress-managed-cert
 spec:
   domains:
-  - testing.withpixie.dev
-  - work.testing.withpixie.dev
-  - docs.testing.withpixie.dev
+  - testing.getcosmic.ai
+  - work.testing.getcosmic.ai
+  - docs.testing.getcosmic.ai
