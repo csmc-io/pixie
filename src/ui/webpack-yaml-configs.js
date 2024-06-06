@@ -21,10 +21,10 @@ const { join } = require('path');
 const utils = require('./webpack-utils');
 
 const OAUTH_DEFAULTS = {
-  PL_OAUTH_PROVIDER: 'hydra',
-  PL_AUTH_URI: '/oauth/hydra',
-  PL_AUTH_CLIENT_ID: 'auth-code-client',
-  PL_AUTH_EMAIL_PASSWORD_CONN: '',
+  PL_OAUTH_PROVIDER: 'auth0',
+  PL_AUTH_URI: 'dev-1mz8slz6vqa57m4g.us.auth0.com',
+  PL_AUTH_CLIENT_ID: 'bgu9Gh7yNsePfuC6RQnAkmrjUvI4lrEq',
+  PL_AUTH_EMAIL_PASSWORD_CONN: 'con_42UmmuSA3VXnhwhW',
   PL_OIDC_HOST: '',
   PL_OIDC_METADATA_URL: '',
   PL_OIDC_CLIENT_ID: '',

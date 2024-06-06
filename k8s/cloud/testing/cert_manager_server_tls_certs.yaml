@@ -1,0 +1,67 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cosmic-ca
+  namespace: plc-testing
+spec:
+  isCA: true
+  commonName: "Cosmic Observe, Inc."
+  subject:
+    organizations:
+    - Cosmic
+  serialNumber: "1"
+  secretName: root-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  duration: 131400h # Default CA to have lifetime of 15 years
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cosmic-ca-issuer
+  namespace: plc-testing
+spec:
+  ca:
+    secretName: root-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: service-tls-certs
+  namespace: plc-testing
+spec:
+  secretName: service-tls-certs
+  issuerRef:
+    name: testing-getcosmic-ai-issuer
+  dnsNames:
+  - '*.plc-testing'
+  - '*.plc-testing.svc.cluster.local'
+  - '*.plc-testing.pod.cluster.local'
+  - '*.pl-nats.plc-testing.svc'
+  - '*.pl-nats'
+  - 'pl-nats'
+  - '*.local'
+  - 'localhost'
+  subject:
+    organizations:
+    - Cosmic
+    countries:
+    - US
+    provinces:
+    - California
+    localities:
+    - "San Francisco"
+  duration: 43800h # Default to have lifetime of 5 years
