@@ -1,0 +1,6 @@
+- op: test
+  path: /metadata/annotations/cloud.google.com~1load-balancer-type
+  value: external
+- op: replace
+  path: /metadata/annotations/cloud.google.com~1load-balancer-type
+  value: internal

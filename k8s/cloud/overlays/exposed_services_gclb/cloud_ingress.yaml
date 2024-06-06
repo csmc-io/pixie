@@ -4,10 +4,9 @@ kind: Ingress
 metadata:
   name: cloud-ingress
   annotations:
-    kubernetes.io/ingress.class: "gce-internal"
+    networking.gke.io/v1beta1.FrontendConfig: "frontend-config"
+    networking.gke.io/managed-certificates: cloud-ingress-managed-cert,cloud-ingress-managed-cert-noslackin
 spec:
-  tls:
-  - secretName: testing-getcosmic-ai-tls
   rules:
   - http:
       paths:

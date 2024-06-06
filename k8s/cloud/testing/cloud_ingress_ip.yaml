@@ -4,4 +4,4 @@ kind: Ingress
 metadata:
   name: cloud-ingress
   annotations:
-    kubernetes.io/ingress.regional-static-ip-name: cosmic-cloud-testing-ingress-internal-ip
+    kubernetes.io/ingress.global-static-ip-name: pixie-cloud-testing-external-ipaddr
