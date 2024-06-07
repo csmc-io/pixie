@@ -44,7 +44,7 @@ data:
                       cluster: api_service
                   cors:
                     allow_origin_string_match:
-                    - suffix: "dev.getcosmic.ai"
+                    - suffix: "dev.withpixie.dev"
                     allow_methods: GET, PUT, DELETE, POST, OPTIONS
                     allow_headers: >
                       keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,
