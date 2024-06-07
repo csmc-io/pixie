@@ -18,7 +18,7 @@ replicas:
 - name: scriptmgr-server
   count: 3
 resources:
-# - frontend_config.yaml
+- frontend_config.yaml
 - cloud_ingress_managed_cert.yaml
 - cloud_ingress_managed_cert_noslackin.yaml
 - cloud_proxy_backend_config.yaml
