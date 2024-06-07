@@ -5,7 +5,9 @@ namespace: plc-testing
 resources:
 - ../../k8s/cloud/testing
 patches:
-- path: overlays/proxy_envoy.yaml
+- path: domain_config.yaml
+- path: proxy_envoy.yaml
+- path: bq_config.yaml
 - path: db_sidecar.yaml
   target:
     kind: Deployment
@@ -44,7 +46,6 @@ patches:
 #   target:
 #     kind: ManagedCertificate
 #     name: cloud-ingress-managed-cert-noslackin
-# - bq_config.yaml
 # - support_access_config.yaml
 # - analytics_config.yaml
 # - contact_config.yaml
