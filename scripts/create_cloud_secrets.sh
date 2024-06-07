@@ -18,18 +18,10 @@
 
 set -e
 
-if [ "$#" -ne 2 ]; then
-  echo "This script requires exactly one argument: <cloud domain> <env>"
-  exit 1
-fi
+namespace="plc"
 
 export LANG=C
 export LC_ALL=C
-
-CLOUD_DOMAIN="$1"
-ENVIRONMENT="$2"
-namespace="plc-${ENVIRONMENT}"
-
 
 kubectl create secret generic -n "${namespace}" \
   cloud-auth-secrets \
@@ -43,26 +35,9 @@ kubectl create secret generic -n "${namespace}" \
 
 kubectl create secret generic -n "${namespace}" \
   pl-db-secrets \
-  --from-literal=PL_POSTGRES_USERNAME="cosmic-dev-db-sa@csmc-dev.iam.gserviceaccount.com" \
+  --from-literal=PL_POSTGRES_USERNAME="pl" \
   --from-literal=PL_POSTGRES_PASSWORD="$(< /dev/urandom tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1)" \
-  --from-literal=database-key="$(< /dev/urandom tr -dc 'a-zA-Z0-9#$%&().' | fold -w 24 | head -n 1)" \
-  --from-file=db_service_account.json
-
-kubectl -n plc-testing create secret generic bq-access-sa --from-file=bq.client.default.credentials_file
-
-kubectl -n plc-testing create secret generic cert-manager-dns01-solver-svc-acct --from-file=key.json
-
-# I believe this is extraneous from using a non let's encrypt cert
-kubectl -n plc-testing create secret generic pl-ssl-cert --cert=server.crt --key=server.key
-
-# Step 7 from https://docs.px.dev/reference/admin/authentication
-kubectl create secret generic -n "${namespace}" \
-  cloud-auth0-secrets \
-  --from-literal=auth0-client-id="<client_id>" \
-  --from-literal=auth0-client-secret="<client_secret>"
-
-# kubectl create secret generic -n "${namespace}" \
-#   pl-db-secrets \
+  --from-literal=database-key="$(< /dev/urandom tr -dc 'a-zA-Z0-9#$%&().' | fold -w 24 | head -n 1)"
 
 kubectl create secret generic -n "${namespace}" \
   cloud-session-secrets \
@@ -125,7 +100,7 @@ PROXY_KEY_FILE="${PROXY_TLS_CERTS}/server.key"
 mkcert \
   -cert-file "${PROXY_CERT_FILE}" \
   -key-file "${PROXY_KEY_FILE}" \
-  "${ENVIRONMENT}.${CLOUD_DOMAIN}" "*.${ENVIRONMENT}.${CLOUD_DOMAIN}" localhost 127.0.0.1 ::1
+  dev.withpixie.dev "*.dev.withpixie.dev" localhost 127.0.0.1 ::1
 
 kubectl create secret tls -n "${namespace}" \
   cloud-proxy-tls-certs \
