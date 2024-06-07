@@ -5,10 +5,13 @@ namespace: plc-testing
 resources:
 - ../../k8s/cloud/testing
 patches:
-- path: frontend_config.yaml
-- path: cloud_ingress_managed_cert.yaml
-- path: cloud_ingress_managed_cert_noslackin.yaml
-- path: db_config.yaml
+# Patches that remove resources not used in cosmic testing cloud.
+# These are largely related to supporting internal Ingress. In addition
+# to moving pl-db-config management to terraform
+- path: deletions/frontend_config.yaml
+- path: deletions/cloud_ingress_managed_cert.yaml
+- path: deletions/cloud_ingress_managed_cert_noslackin.yaml
+- path: deletions/db_config.yaml
 - path: domain_config.yaml
 - path: proxy_envoy.yaml
 - path: bq_config.yaml
@@ -36,10 +39,6 @@ patches:
   target:
     kind: Ingress
     name: cloud-ingress
-# - path: frontend_config
-#   target:
-#     kind: FrontendConfig
-#     name: cloud-ingress
 # Not used in testing but is required for Internet facing environments.
 # Testing environment relies on cert-manager for this certificate.
 # - path: cloud_ingress_managed_certs.yaml
@@ -50,19 +49,3 @@ patches:
 #   target:
 #     kind: ManagedCertificate
 #     name: cloud-ingress-managed-cert-noslackin
-# - support_access_config.yaml
-# - analytics_config.yaml
-# - contact_config.yaml
-# - db_config.yaml
-# - indexer_config.yaml
-# - service_config.yaml
-# - domain_config.yaml
-# - cloud_ingress_ip.yaml
-# - script_bundles_config.yaml
-# - proxy_envoy.yaml
-# - auth_deployment.yaml
-# patches:
-# - path: db_sidecar.yaml
-#   target:
-#     kind: Deployment
-#     labelSelector: db=pgsql
