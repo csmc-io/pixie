@@ -1,0 +1,22 @@
+apiVersion: ENC[AES256_GCM,data:3Z4=,iv:KyCSuMq5dy0vSRmf7OmtXiOaqJ+IT/ETFYDJ+3IVeZY=,tag:7zaDXOD/ZhEv/kzwkJUmkA==,type:str]
+kind: ENC[AES256_GCM,data:kt+le/VqNV5x,iv:AIAyvxuS/IsUdiOWYuskezagk8Fz9iVxOP+ysAJ6MMk=,tag:u2UZNm35PKGyw/SxuAhgNw==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:9i1HjcxAVRFlCEjmDZj8,iv:y6twRRWmjLTGy1LFvFofZFYToMHQnTHFqtUcM2q7hVM=,tag:WHuMHf2iC6FmZr1VBUpysQ==,type:str]
+    namespace: ENC[AES256_GCM,data:Bf8W8Hq9iqjF4YY=,iv:SgsYGOtFHt3HvNZE192FrUa7jFN/SNK6AUPc6O1tF14=,tag:jL+W7Wh4k91kcr7rTH198A==,type:str]
+data:
+    PL_OAUTH_PROVIDER: ENC[AES256_GCM,data:KuHgOFw=,iv:hMhHPUqqprXohRKlrQ7ENf4DiW0Q2Sj7i0Iu2WhW7IY=,tag:tP2bEHMu7VtAcEk0epqo5A==,type:str]
+    PL_AUTH_URI: ENC[AES256_GCM,data:J4UiB5FzLKWEft4ZN7Du8YmmJdnsTPHN8fBodouC7CB6,iv:bxARj9B5oVRa3chyNvcQk2EX0hFFmOUPkCrK5FfYd28=,tag:enNLxb22LOUuUKmyKgFDpQ==,type:str]
+    PL_AUTH_CLIENT_ID: ENC[AES256_GCM,data:TLBp7EMRJFnzdEST+AxECf3KeyHbT19SQzKLJUZFxaA=,iv:ljn1WGhziJzbwMuocYVIuzR6K/bS9oJaHm6mYM65ynE=,tag:XUoTf+Fhj7H6SIPOCRD1fg==,type:str]
+    PL_AUTH_EMAIL_PASSWORD_CONN: ENC[AES256_GCM,data:9BpW2S0l9IlWpRhN81lPZ9jbhVQ=,iv:/l/xhXXiBxO71NCwb0hSx/YQMuYRhG/XxtMzDkl9Tdw=,tag:Zn1/tgNtC3doJA1ATbe3xw==,type:str]
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/csmc-staging/locations/global/keyRings/staging-keyring/cryptoKeys/sops-key
+        created_at: '2024-06-10T06:18:23Z'
+        enc: CiQAVx9wUak0iJ7RL4dw4UeSQzM1NfyXmZ5mPqaSgNa3bbZoADISSQCi7xzhS7gD+QdOa5cQ8uD2wizc6woeJrQ57y1f+evfCDs5DptwBJzFCERKv/GW8CAtmTG+QrTCjO9OWOvMt24aPlqBT4shZRA=
+    azure_kv: []
+    lastmodified: '2024-06-10T06:18:24Z'
+    mac: ENC[AES256_GCM,data:DHyiVNQLBlsOb50m0QYzNHa+YrkNfpkqwrJibDjJRIw4u3IlbTNfYsP+yMA46FurtzUyiC/rG6n84XQs63WlCEUhXiKwhjQtOsvq1QZm5W4hKbyFOdqKY6vg+UbJQYuK1risSTSTSI3lLU3ZafMIWGXpOE5SLo7/Vg7kiqf5mVA=,iv:SJYf0LJxor8I6MkoIbE37U0TFIxBE+dZgZswZ/361Lw=,tag:TmdtGc5/td8QzKe/PcoHkQ==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.3.1
