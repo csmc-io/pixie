@@ -1,0 +1,31 @@
+
+source_repo = "git@github.com:pixie-io/pixie.git"
+dest_repo= "git@github.com:csmc-io/pixie.git"
+
+core.workflow(
+    name = "default",
+    origin = git.origin(
+        url = source_repo,
+        ref = "main",
+    ),
+    destination = git.destination(
+        url = dest_repo,
+        fetch = "main",
+        push = "main",
+    ),
+    origin_files = glob(
+        [
+            "**/**",
+        ],
+        exclude = [
+            ".git/**",
+            "**/private/**",
+            "*_private.*",
+            ".sops.yaml",
+        ],
+    ),
+    destination_files = glob(["**"]),
+    authoring = authoring.pass_thru("Copybara <copybara@getcosmic.ai>"),
+    mode = "ITERATIVE",
+    transformations = [],
+)
