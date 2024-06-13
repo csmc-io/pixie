@@ -4,4 +4,3 @@ creation_rules:
   gcp_kms: projects/csmc-staging/locations/global/keyRings/staging-keyring/cryptoKeys/sops-key
 - path_regex: private\/testing\/.*yaml$
   gcp_kms: projects/csmc-dev/locations/global/keyRings/sops/cryptoKeys/sops-key
-
