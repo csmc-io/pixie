@@ -1,10 +1,9 @@
 ---
-name: pxapi-copybara
+name: pixie-oss-copybara
 on:
   workflow_dispatch:
-  push:
-    branches:
-    - 'main'
+  schedule:
+    - cron: '0 15 * * *'
 permissions:
   contents: read
 jobs:
@@ -22,8 +21,8 @@ jobs:
       env:
         COPYBARA_GPG_KEY: ${{ secrets.COPYBARA_GPG_KEY }}
         COPYBARA_GPG_KEY_ID: ${{ secrets.COPYBARA_GPG_KEY_ID }}
+      # ac4d4e38c1a03b750045211335a682b11443fb56 is when fork started
+      # This is only needed for the first copybara run
       run: >
         GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /tmp/sshkey'
-        # ac4d4e38c1a03b750045211335a682b11443fb56 is when fork started
-        # This is only needed for the first copybara run
         ./ci/run_copybara.sh private/tools/copybara/copy.bara.sky --last-rev ac4d4e38c1a03b750045211335a682b11443fb56
