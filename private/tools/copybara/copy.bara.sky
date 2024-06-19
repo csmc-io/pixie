@@ -19,6 +19,7 @@ core.workflow(
         ],
         exclude = [
             ".git/**",
+            ".github/workflows/*",
             "**/private/**",
             "*_private.*",
             ".sops.yaml",
