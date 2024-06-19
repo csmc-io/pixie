@@ -16,16 +16,26 @@ core.workflow(
     origin_files = glob(
         [
             "**/**",
+            ".*",
+            "*",
         ],
         exclude = [
             ".git/**",
-            ".github/workflows/*",
-            "**/private/**",
-            "*_private.*",
-            ".sops.yaml",
+            ".github/workflows/**",
+            "ci/run_copybara.sh", # TODO(ddelnano): Remove once this is upstream
         ],
     ),
-    destination_files = glob(["**"]),
+    destination_files = glob(
+        ["**"],
+        exclude = [
+            "**/private/**",
+            "private/**",
+            "*_private.*",
+            ".sops.yaml",
+            ".github/workflows/copybara_pixie_oss.yaml",
+            "ci/run_copybara.sh", # TODO(ddelnano): Remove once this is upstream
+        ],
+    ),
     authoring = authoring.pass_thru("Copybara <copybara@getcosmic.ai>"),
     mode = "ITERATIVE",
     transformations = [],
