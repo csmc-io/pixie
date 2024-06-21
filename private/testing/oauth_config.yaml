@@ -7,7 +7,7 @@ data:
     PL_OAUTH_PROVIDER: ENC[AES256_GCM,data:dKassss=,iv:Au6La5qfgzJs9l4EIfaekIhPNBSmqDWIQbCCllWCCLI=,tag:Qn34gV6JD01hacatU7P2TQ==,type:str]
     PL_AUTH_URI: ENC[AES256_GCM,data:sHa+FPb9omYZRJnRtP/ipeBuFld5p6JWEJgOqAkoi+QD,iv:HGI3QhtFmINOgkSpT6Wpeeb5GsMWgCr/bf8cW0jYZ38=,tag:pw1Oe4qSZVqs7yCB5q1gZA==,type:str]
     PL_AUTH_CLIENT_ID: ENC[AES256_GCM,data:VfT05kZ1dQQWRi5SHZo8CFz0j3G0KgCSe+AvpwQYVSQ=,iv:lhDb+Ws2SMMT7TnnFoSj7H8CuweG5ONFGVcc6yd+zHM=,tag:aO651QGSN36VYjMT06uCXw==,type:str]
-    PL_AUTH_EMAIL_PASSWORD_CONN: ENC[AES256_GCM,data:J7sRrY7TFboXi5rXdxqRaJZIaWM=,iv:s84VzdSOdAAjAd8D7+uJyO6i9FDG5kjsKtp4OpPRxqU=,tag:Wiz117RQokMfdckk8sklpA==,type:str]
+    PL_AUTH_EMAIL_PASSWORD_CONN: ENC[AES256_GCM,data:NGpoAJ1Q4T+bUj67xpZF4KX3XE1wOOcg3w5mt0JnEXA=,iv:FK7e7dnUtoSJOqjCobNULkXUkAfiM2AYZ/UJH+z9nLY=,tag:CMkCswavcfpEl64ByPFalA==,type:str]
 sops:
     kms: []
     gcp_kms:
@@ -15,8 +15,8 @@ sops:
         created_at: '2024-06-07T03:31:03Z'
         enc: CiQAvs16itB3wbrHisnF3Vmoqs1ZepW8MenOcy76W1WnIHstJyISSQCynFbJqYYlxUAl4Jgzdi2nGksMABZ6KHaUEKz1IwrShZRsABgNnpcmk8NwVlfDLMUEZepbi1Xdwsw2KxGE7V7JcEB1xnrQygo=
     azure_kv: []
-    lastmodified: '2024-06-07T03:31:03Z'
-    mac: ENC[AES256_GCM,data:aQCBTB5xfXq7elWxrBLlLyem2ZDblCPaSdXYFtI29Jqkpb2z8E17BEnV5A5glgnGpJ2yRKNMIe2PHNF5h30etTG3wSWbllPbgUXR4ofkVjpPdT9X20ILj4WzYu72IXxa/TStzRH5XoJRN3MDNvDFiHTYFGGwo4xejRtwP8olrNc=,iv:M1OmG2vx+X1nDJh1aGdVb+cYqL+ZbtNY8mVPlXurOns=,tag:cxmmV9pve484kCAwINP14A==,type:str]
+    lastmodified: '2024-06-20T20:57:31Z'
+    mac: ENC[AES256_GCM,data:/Tm7TahPYWXSoLEw3lFA8bpuNit3sps0wTnANpEuIVtdMB99HdAQ8Xzhu5yJNOUdI7OidML3SLxTzDIqhrgaejALZwG+0BMkqDi4+pN16t78/Hkq5fASvj0wn4rDP5vtoulAZ37Al2J/7+Waon/ss+sZlGID4Y/JeGMJJS4jmVo=,iv:RjODeg0pZJMFcvHKnYA0Jn/o7TkkKIXH4Aqs7mGusDY=,tag:69CSRX+iWlWg/59tWyopEA==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.3.1
