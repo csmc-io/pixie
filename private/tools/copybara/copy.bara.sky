@@ -1,3 +1,11 @@
+# Copyright © 2024- Cosmic Observe, Inc.
+# All Rights Reserved.
+#
+# NOTICE:  All information contained herein is, and remains
+# the property of Cosmic Observe, Inc. and its suppliers,
+# if any.
+#
+# SPDX-License-Identifier: Proprietary
 
 source_repo = "git@github.com:pixie-io/pixie.git"
 dest_repo= "git@github.com:csmc-io/pixie.git"
@@ -22,6 +30,7 @@ core.workflow(
         exclude = [
             ".git/**",
             ".github/workflows/**",
+            "tools/licenses/checker.py",
             "ci/run_copybara.sh", # TODO(ddelnano): Remove once this is upstream
         ],
     ),
