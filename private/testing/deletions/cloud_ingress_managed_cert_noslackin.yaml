@@ -1,0 +1,6 @@
+$patch: delete
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: cloud-ingress-managed-cert-noslackin
+spec:

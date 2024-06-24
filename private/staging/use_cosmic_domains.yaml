@@ -1,0 +1,7 @@
+- op: replace
+  path: /spec/domains
+  value:
+  - staging.getcosmic.ai
+  - work.staging.getcosmic.ai
+  - docs.staging.getcosmic.ai
+  - segment.staging.getcosmic.ai
