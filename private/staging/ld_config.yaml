@@ -1,0 +1,19 @@
+apiVersion: ENC[AES256_GCM,data:3+8=,iv:qfO0nZHd0w8xR2d3rKNu3tNbkScajK8x1czJiF8NIq4=,tag:kGCz4x+myt7Lnb6KLQeznw==,type:str]
+kind: ENC[AES256_GCM,data:I+z0N7Rw9S2x,iv:FkfC+XEB/IsIBg2K3r5f9wR3M0mjlTffTvHZ6ZuVTRw=,tag:lwkpOiKNBkJC5dq+KDElnQ==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:ir1z/zOG6whR7tML,iv:iKk12VulSRYLung1TBoNKpxUYCUzWWrFCPb79+QjCEc=,tag:kAPp2iSCpbXV39MXCni9Vw==,type:str]
+data:
+    PL_LD_CLIENT_ID: ""
+    PL_LD_SDK_KEY: ""
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/csmc-staging/locations/global/keyRings/staging-keyring/cryptoKeys/sops-key
+        created_at: '2024-06-10T16:30:57Z'
+        enc: CiQAVx9wUdEwthxhy6hQx05WaqwAmIWJn4Fv97YszQJ9K9XfMI0SSACi7xzhYdFsoozPAw8maoQN/0nhTJkKKkXTbqC45tJ3+5mhe1F7RrtyDYE7psEmemEFDJTVaZgrZd1f3J0h4YoPHypGkLnp/Q==
+    azure_kv: []
+    lastmodified: '2024-06-10T16:30:57Z'
+    mac: ENC[AES256_GCM,data:e0asvuoFl2XEERD8sdvMPz0OoFy3/PM4N2oZjey/gP/4/Y9uWdnbzK1XupgO2eF8b3O9YKCj+1OB2xJ4pZjsd6qqlzK8vhy3nysNFpvY3zUnMs+bBJBcsMpmgqSZvqZw93YosNtsYNYROAKSEIiv+FFDVKD2B5/MdVt4CPrmRw8=,iv:X/X18lWwLUVimM6f/dbe9FA1QPtG5+IEBgHinpnqrzM=,tag:fVTe/tAfjadq5pb8MqXXBA==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.3.1

@@ -1,0 +1,6 @@
+- op: remove
+  path: /spec/securityPolicy
+- op: replace
+  path: /spec/cdn
+  value:
+    enabled: false

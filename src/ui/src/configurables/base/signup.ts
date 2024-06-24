@@ -16,18 +16,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as React from 'react';
-export const termsUri = 'https://www.linuxfoundation.org/terms';
-export const privacyUri = 'https://www.linuxfoundation.org/privacy';
-
-export const TermsAndPrivacy = React.memo<{ classes: Record<'text', string> }>(({ classes }) => {
-  return (<>
-    <a href={termsUri} className={classes.text}>
-      Terms & Conditions
-    </a>
-    <a href={privacyUri} className={classes.text}>
-      Privacy Policy
-    </a>
-  </>);
-});
-TermsAndPrivacy.displayName = 'TermsAndPrivacy';
+// Need to encapsulate so that newline is properly escaped.
+export const signupMessage = `Pixie Community is Free Forever.
+No Credit Card Needed.`;

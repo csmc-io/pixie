@@ -1,0 +1,6 @@
+- op: test
+  path: /metadata/annotations/kubernetes.io~1ingress.global-static-ip-name
+  value: pixie-cloud-staging-external-ipaddr
+- op: replace
+  path: /metadata/annotations/kubernetes.io~1ingress.global-static-ip-name
+  value: cosmic-cloud-staging-ingress-ip

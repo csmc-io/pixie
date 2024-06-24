@@ -1,5 +1,5 @@
 /*
- * Copyright 2018- The Pixie Authors.
+ * Copyright © 2024–2026 Cosmic Observe, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,13 @@
  */
 
 import * as React from 'react';
-export const termsUri = 'https://www.linuxfoundation.org/terms';
-export const privacyUri = 'https://www.linuxfoundation.org/privacy';
 
 export const TermsAndPrivacy = React.memo<{ classes: Record<'text', string> }>(({ classes }) => {
   return (<>
-    <a href={termsUri} className={classes.text}>
+    <a href='https://csmc.ai/docs/terms-and-conditions/tos/' className={classes.text}>
       Terms & Conditions
     </a>
-    <a href={privacyUri} className={classes.text}>
+    <a href='https://csmc.ai/docs/terms-and-conditions/privacy-policy/' className={classes.text}>
       Privacy Policy
     </a>
   </>);
