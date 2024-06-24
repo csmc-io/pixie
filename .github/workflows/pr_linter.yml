@@ -36,6 +36,8 @@ jobs:
       run: git fetch origin main:main
     - name: Check merge base
       run: git merge-base origin/main HEAD  # This is what arc uses to determine what changes to lint.
+    - name: Check python3
+      run: which python3
     - name: Run arc lint
       run: arc lint --apply-patches --trace
     - name: Fail if any files changed
