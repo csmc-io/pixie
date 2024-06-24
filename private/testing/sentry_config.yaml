@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pl-sentry-dsn-config
+data:
+  PL_PROD_SENTRY: ""
+  PL_DEV_SENTRY: ""
+  PL_OPERATOR_SENTRY: ""
