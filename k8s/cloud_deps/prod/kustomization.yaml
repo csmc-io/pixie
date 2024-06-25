@@ -9,7 +9,7 @@ resources:
 - elastic
 - kibana
 - nats
-patches:
-- path: node_selector_patch.yaml
-  target:
-    kind: StatefulSet
+# patches:
+# - path: node_selector_patch.yaml
+#   target:
+#     kind: StatefulSet
