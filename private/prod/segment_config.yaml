@@ -1,0 +1,20 @@
+apiVersion: ENC[AES256_GCM,data:58A=,iv:oBoU+Fyg+nt/pMHu1ruMzUIlvFGwIEmoAUR3JlaLiXw=,tag:DsvGfsFTtsg1eaEXw2MuOg==,type:str]
+kind: ENC[AES256_GCM,data:oK3m9mIYfmGK,iv:VHdTXhvZo9pMDyozzm+J3sYEoK3sAMoV/Dp9ihjFfn4=,tag:xDkdQTDKfBlCFIhGIwAMvA==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:jmgmupvetl/WYumK5wk=,iv:RpJEbIhZCwrCxhzhS03DvHXFvj85Vp3idIM8NLlM644=,tag:4RbjCAwlJFRjKYGf66j2TA==,type:str]
+data:
+    write-key: ENC[AES256_GCM,data:1otZoi0Rj4yAATg9MGDiLq7dq48UEeA7BbLeijD/6c8=,iv:7lbLaWt+nDWE2pp45GIDOuNR88/wtFtLXKkxjkm8ZJ8=,tag:kPVCwonn5fg2aGzB5z+7Gg==,type:str]
+    ui-write-key: ENC[AES256_GCM,data:b3RufpCRsqprqpWX0YDMW7QZUJLPY3+1Lzm3rqnFR5I=,iv:zDvLbr/pcL2Jh0joSRE1JCehQQTpZRiHskgoKED8Arc=,tag:emwPn4WtJDQ+Zme+ofRrJA==,type:str]
+    cli-write-key: ENC[AES256_GCM,data:vtNvskgc5sPIBm1V1xCy0GY+/kWl9z2wh53/IottQk4=,iv:910woUpEt359i20mBQX5KLOqqx792BsfbDFz5Ew3vFs=,tag:obORtcC8DEV+PIdJeLBSLw==,type:str]
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/csmc-prod/locations/global/keyRings/prod-keyring/cryptoKeys/sops-key
+        created_at: '2024-06-25T06:19:33Z'
+        enc: CiQAcY70MZ+aIR1lDzL3FM/1jgeQbAqryUu4UY2MM+e61xITNfsSSQAjULcWFQ0JuoVPD3WberVY5j4A3qUzcGxfmaPi3+eRRxcg2bsBpY85fac/4HW8UKddchKQT5krM5vcvU2frzV6pQwZYw8wIYY=
+    azure_kv: []
+    lastmodified: '2024-06-25T06:19:34Z'
+    mac: ENC[AES256_GCM,data:zcBGy9iiSQRbHlzWYHqvW+Vj6VsPnFxgiX3hYkuF+L4YzGm+PTIuMtmGvqDAl6viOeNfGSAw/WAj48ESDy8zXzqaR3jnE7WfvjugxkPR3tCtUALItFy2E0Oqte0LgFmALg8VIDcoxsvkzDNQnRExS3rF5O7w+Xzg7/b90ur8dh4=,iv:tPc+P/dERvvTuMxU0wHYlnB9i+kaHl21zX0H5M6hnyg=,tag:OInHp15Hkv69gPTqjHMrYg==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.3.1

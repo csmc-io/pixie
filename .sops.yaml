@@ -1,5 +1,7 @@
 ---
 creation_rules:
+- path_regex: private\/prod\/.*yaml$
+  gcp_kms: projects/csmc-prod/locations/global/keyRings/prod-keyring/cryptoKeys/sops-key
 - path_regex: private\/staging\/.*yaml$
   gcp_kms: projects/csmc-staging/locations/global/keyRings/staging-keyring/cryptoKeys/sops-key
 - path_regex: private\/testing\/.*yaml$

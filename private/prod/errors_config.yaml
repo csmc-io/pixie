@@ -1,0 +1,18 @@
+apiVersion: ENC[AES256_GCM,data:eX8=,iv:GII33GnW06Bdo46o/1F2wqtQenxLVr34ncigQCtoAM0=,tag:Ia2bUtLBHWAldALHdnMCJw==,type:str]
+kind: ENC[AES256_GCM,data:EQVetwPk3GAG,iv:LkhOkTn91g/5/7UJqZsaM7pXMgVfwEouw/mHG46lCqo=,tag:vsR8WxIH41d4MFhyNKp2Qw==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:WjMWBEagVW/2r2srAFTPpg==,iv:wvpYH0Ylyd5adL5869s0U6PBIjK9FpwDPXCvMVM5g5c=,tag:ecWHfJydrWDdkJtM3dkp9A==,type:str]
+data:
+    PL_SENTRY_DSN: ENC[AES256_GCM,data:cltIJR+YGHvdf71x1gKPdsPZVCQ059LffGcY8eGJIDdbh1jx3m2oCSHtFFEMukux5lGzgYnGTnuDlmwvWdBcTzvtaCqTxNc1DPAIrhqB4979gOIf5TeM4y1adYChd3M=,iv:dSURrHvQzd8L7XobaKs+jQ+VKHGuAjOqoL+49kicTP0=,tag:RM/gZHThDL9VmoeZxOnygw==,type:str]
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/csmc-prod/locations/global/keyRings/prod-keyring/cryptoKeys/sops-key
+        created_at: '2024-06-25T06:36:12Z'
+        enc: CiQAcY70MZ22FBTcWu07xqwOeC+idEG7EktqlB/MwPHKK78L0XQSSQAjULcWXRszKrO2diB9ns/DjU9czRnjrFTjFdcvkZ+68stxgVVQdRiQF+OEPvC1dZe22tjJ8SIgnQhtjjKP69rNtoMSk8EdzqE=
+    azure_kv: []
+    lastmodified: '2024-06-25T06:36:12Z'
+    mac: ENC[AES256_GCM,data:x5Iq0FO+RNFb5j1MpccEJWqw44bPRGwciwxBUVokySKq8EsTE0rtNAbvey9sPuzsHra3f8yhfjq/scY5OBvoySfFo8ypFA0/6Dc2Pjx2rz6x7UF5Bx7EMmnVXjYv7JAD5FpU93MlwxJbKHuavnBX57WdemoOsa9zW9Y62FbX2Fs=,iv:FuQpVo3e3S1ugPxwk1S9W+D63Qwc+R1uFwqZ6UGe7M0=,tag:NrSrL2Z236NB0ECO8m7Mpw==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.3.1

@@ -1,0 +1,22 @@
+apiVersion: ENC[AES256_GCM,data:vy8=,iv:+RIHpDdsF41nvV89yTYTUylb0aBm9ZPih19UW1JXxbs=,tag:3umNAIrj2uCBMnsRvPISRQ==,type:str]
+kind: ENC[AES256_GCM,data:CTt6nzMcniw7,iv:cdBdb48QgzwFbjSPHe1CEE/abR1adwznKP/1wZajwek=,tag:dgSGm8BzpUsrAjuLcLQ2tg==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:PJWXBsadqfRx71/NNzK1,iv:oQ77ccTGHOvAg7yk0mf2Q25N3IKWnHoeunkBNfdk3q0=,tag:1LrIMxU+9DMYU0eqhGux9A==,type:str]
+    namespace: ENC[AES256_GCM,data:YHDh,iv:MWkHEuBZ6WuoBO45pLv4Pd3ryx1zk8/lgZZt4oaX58I=,tag:PkTX9tvrCXAx/DTpy0zO9A==,type:str]
+data:
+    PL_OAUTH_PROVIDER: ENC[AES256_GCM,data:zgqeoJE=,iv:Vu7nuP+UchAXzRg5T+imyQ6vq/gmaHc238bO/wH3Nc0=,tag:+Rs2HatXDq+7JxzYR0PKNQ==,type:str]
+    PL_AUTH_URI: ENC[AES256_GCM,data:QVryOxrRXfoIa+7/sUlvLhTi8jsFtg==,iv:AIGhUdVCyDs7gH4Byhx2eNZ+NihW6OCiwCMFMCPwO+Y=,tag:LsY/nFDjxXLgDocYooyy+w==,type:str]
+    PL_AUTH_CLIENT_ID: ENC[AES256_GCM,data:64D+3Xmi+T+zbh9f8e98akGQyOIkgFg+m5o1mCCgjBA=,iv:Hb2sTyk7wIDRymYNsOwLVJldR95ClEjiIkdkN6pDmvs=,tag:qxeiycL2TK4XIExMai36XA==,type:str]
+    PL_AUTH_EMAIL_PASSWORD_CONN: ENC[AES256_GCM,data:eCjoLFb8wv7LqHQXXXWrAoUdi1hZ4mbn5qbpJxcEKNE=,iv:2zqprevqRFuWBKLd8YB04QHYv5FGYNNu7DoWqZeHICQ=,tag:rTXli8CltXktyenM36NUUg==,type:str]
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/csmc-prod/locations/global/keyRings/prod-keyring/cryptoKeys/sops-key
+        created_at: '2024-06-25T06:23:51Z'
+        enc: CiQAcY70MUdKr+8KzlBf8deIVIIiGYiL/biFMKYPRzOhExS5kToSSQAjULcWhmjjyluYy+0DMnEzi6cgP6wVI6Kf8sBG9bqO926S+Obs9zWKdSWTnDVi3unhGyZnR7uea50QlLcoYbrEHRLxEcpoD/I=
+    azure_kv: []
+    lastmodified: '2024-06-25T06:23:51Z'
+    mac: ENC[AES256_GCM,data:AXYDRV1Kp3KwrK0+IeB4iW2IgNRiNlMnaQK0Q/brRTODRnCmBSgPYyqUAEONgPX/oxq5lp1hEB7X/C+VDlUAsybT/Dn1Ggp7vddBRxv65weVNTKyW6l7JfAFGRGjRTyut/zlAH5so0c6PehcUN4XV/IuJM8p1hWWM7GZuic4eoo=,iv:5lOXSWIfVIIRJkJLhF9IGt8ZJZ6+vr/LrmtLnDQr0X8=,tag:xuZFLBJJqrTN7QPCgx8inw==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.3.1
