@@ -7,6 +7,7 @@ resources:
 patches:
 - path: deletions/db_config.yaml
 - path: domain_config.yaml
+- path: script_bundles_config.yaml
 - path: backend_config.yaml
   target:
     kind: BackendConfig
