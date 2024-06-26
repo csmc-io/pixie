@@ -30,3 +30,7 @@ patches:
   target:
     kind: ManagedCertificate
     name: cloud-ingress-managed-cert-noslackin
+- path: plugin_job_image_override.yaml
+  target:
+    kind: Job
+    name: plugin-db-updater-job
