@@ -2,7 +2,7 @@
 # Master node.
 - op: replace
   path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/resources/requests/storage
-  value: 25Gi
+  value: 50Gi
 
 - op: add
   path: /spec/nodeSets/0/volumeClaimTemplates/0/spec/storageClassName
@@ -11,7 +11,7 @@
 # Data node.
 - op: replace
   path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/resources/requests/storage
-  value: 35Gi
+  value: 100Gi
 
 - op: add
   path: /spec/nodeSets/1/volumeClaimTemplates/0/spec/storageClassName
