@@ -8,9 +8,9 @@ patches:
 - path: elastic_creds.yaml
   target:
     kind: Elasticsearch
-# - path: node_selector_patch.yaml
-#   target:
-#     kind: Elasticsearch
+- path: node_selector_patch.yaml
+  target:
+    kind: Elasticsearch
 - path: elastic_storage_patch.yaml
   target:
     group: elasticsearch.k8s.elastic.co
