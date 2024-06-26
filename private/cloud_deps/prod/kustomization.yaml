@@ -5,6 +5,10 @@ namespace: plc
 resources:
 - ../../../k8s/cloud_deps/prod
 patches:
+- path: nats_storage_patch.yaml
+  target:
+    kind: StatefulSet
+    name: pl-nats
 - path: node_selector_patch.yaml
   target:
     kind: StatefulSet
