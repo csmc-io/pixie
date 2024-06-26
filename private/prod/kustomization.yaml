@@ -5,6 +5,9 @@ namespace: plc
 resources:
 - ../../k8s/cloud/prod
 patches:
+- path: node_selector_patch.yaml
+  target:
+    kind: Deployment
 - path: deletions/db_config.yaml
 - path: domain_config.yaml
 - path: script_bundles_config.yaml
