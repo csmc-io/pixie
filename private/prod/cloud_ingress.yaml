@@ -1,3 +1,4 @@
+---
 - op: test
   path: /metadata/annotations/kubernetes.io~1ingress.global-static-ip-name
   value: pixie-cloud-prod-external-ipaddr
