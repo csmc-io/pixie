@@ -64,8 +64,7 @@ export const SignupPage = React.memo(() => {
             toggleURL={`/auth/login${window.location.search}`}
             title='Get Started'
             // Need to encapsulate so that newline is properly escaped.
-            body={`Pixie Community is Free Forever.
-          No Credit Card Needed.`}
+            body={``}
             buttonCaption='Already have an account?'
             buttonText='Login'
             showTOSDisclaimer
