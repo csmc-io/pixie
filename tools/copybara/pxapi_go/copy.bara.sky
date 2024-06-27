@@ -34,7 +34,16 @@ core.workflow(
             "src/api/go/pxapi/examples/**",
             "src/api/proto/**",
         ],
-        exclude = ["**/private/**", "*_private.*"],
+        exclude = [
+          "**/private/**",
+          "*_private.*",
+          # TODO(ddelnano): These changes should be worked out to remove the
+          # need for these exclusions.
+          ".arclint",
+          "src/ui/src/pages/auth/signup.tsx",
+          "src/ui/src/containers/App/topbar.tsx"
+          "src/ui/src/components/auth/auth-box.tsx"
+        ],
     ),
     destination_files = glob(["**"]),
     authoring = authoring.pass_thru("Copybara <copybara@pixielabs.ai>"),
