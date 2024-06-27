@@ -113,9 +113,9 @@ export const AuthBox: React.FC<WithChildren<AuthBoxProps>> = React.memo((props) 
           <>
             <Typography variant='subtitle2' className={classes.disclaimer}>
               By signing up, you&apos;re agreeing to&nbsp;
-              <a href='https://pixielabs.ai/terms/'>Terms of Service</a>
+              <a href='https://csmc.ai/docs/terms-and-conditions/tos/'>Terms of Service</a>
               &nbsp;and&nbsp;
-              <a href='https://pixielabs.ai/privacy'>Privacy Policy</a>
+              <a href='https://csmc.ai/docs/terms-and-conditions/privacy-policy/'>Privacy Policy</a>
               .
             </Typography>
           </>
