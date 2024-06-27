@@ -31,13 +31,13 @@ const useStyles = makeStyles(() => createStyles({
 export const Logo = React.memo<{ color?: string }>(({ color }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const mode = theme.palette.mode;
+  const { mode } = theme.palette;
 
   return (
     <div className={classes.logoContainer}>
       <img
         className={classes.logo}
-        src={mode == "light" ? lightLogo : darkLogo}
+        src={mode == 'light' ? lightLogo : darkLogo}
         style={{
           color,
           fill: color,
