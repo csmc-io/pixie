@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: plc
 resources:
 - ../../k8s/cloud/prod
+- pod_monitoring.yaml
 patches:
 - path: node_selector_patch.yaml
   target:
