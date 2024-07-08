@@ -46,6 +46,7 @@ void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* /*ctx*/,
 
     int64_t timestamp = AdjustedSteadyClockNowNS();
     std::string prom_text = FetchPrometheusMetrics("http://node-agent-service.coroot.svc.cluster.local:80/metrics");
+    LOG(INFO) << absl::Substitute("Fetched prom_text=$0", prom_text);
     std::vector<Metric> metrics = DecodeMetric(prom_text, "container_log_messages_total");
     for (auto& metric : metrics) {
         std::string str = ToString(metric);

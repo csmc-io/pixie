@@ -62,6 +62,9 @@ enum class SourceConnectorGroup {
 
   // The TCP conenction TX/RX/Retransmission metrics.
   kTCPStats,
+
+  // Log pattern matching.
+  kLogPatterns,
 };
 
 /**

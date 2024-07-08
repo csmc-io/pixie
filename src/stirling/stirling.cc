@@ -57,12 +57,13 @@
 #include "src/stirling/source_connectors/seq_gen/seq_gen_connector.h"
 #include "src/stirling/source_connectors/socket_tracer/socket_trace_connector.h"
 #include "src/stirling/source_connectors/stirling_error/stirling_error_connector.h"
+#include "src/stirling/source_connectors/log_patterns/log_patterns_connector.h"
 
 #include "src/stirling/source_connectors/dynamic_tracer/dynamic_tracing/dynamic_tracer.h"
 #include "src/stirling/source_connectors/tcp_stats/tcp_stats_connector.h"
 
 DEFINE_string(stirling_sources, gflags::StringFromEnv("PL_STIRLING_SOURCES", "kProd"),
-              "Choose sources to enable. [kAll|kProd|kMetrics|kTracers|kProfiler|kTCPStats] or "
+              "Choose sources to enable. [kAll|kProd|kMetrics|kTracers|kProfiler|kTCPStats|kLogPatterns] or "
               "comma separated list of "
               "sources (find them the header files of source connector classes).");
 
@@ -80,6 +81,7 @@ const std::vector<SourceRegistry::RegistryElement> kAllSources = {
     REGISTRY_PAIR(NetworkStatsConnector),      REGISTRY_PAIR(PerfProfileConnector),
     REGISTRY_PAIR(PIDCPUUseBPFTraceConnector), REGISTRY_PAIR(proc_exit_tracer::ProcExitConnector),
     REGISTRY_PAIR(StirlingErrorConnector),     REGISTRY_PAIR(TCPStatsConnector),
+    REGISTRY_PAIR(LogPatternsConnector),
 };
 #undef REGISTRY_PAIR
 
@@ -99,6 +101,7 @@ std::vector<std::string_view> GetSourceNamesForGroup(SourceConnectorGroup group)
         PerfProfileConnector::kName,
         proc_exit_tracer::ProcExitConnector::kName,
         StirlingErrorConnector::kName,
+        LogPatternsConnector::kName,
       };
     case SourceConnectorGroup::kAll:
       return {
@@ -111,6 +114,7 @@ std::vector<std::string_view> GetSourceNamesForGroup(SourceConnectorGroup group)
         SocketTraceConnector::kName,
         PerfProfileConnector::kName,
         StirlingErrorConnector::kName,
+        LogPatternsConnector::kName,
       };
     case SourceConnectorGroup::kTracers:
       return {
@@ -129,6 +133,10 @@ std::vector<std::string_view> GetSourceNamesForGroup(SourceConnectorGroup group)
     case SourceConnectorGroup::kTCPStats:
       return {
        TCPStatsConnector::kName
+      };
+    case SourceConnectorGroup::kLogPatterns:
+      return {
+        LogPatternsConnector::kName
       };
     default:
       // To keep GCC happy.
