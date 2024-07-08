@@ -49,9 +49,14 @@ void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* /*ctx*/,
     LOG(INFO) << absl::Substitute("Fetched prom_text=$0", prom_text);
     std::vector<Metric> metrics = DecodeMetric(prom_text, "container_log_messages_total");
     for (auto& metric : metrics) {
+
+        if (metric.labels["sample"] == "" ||
+            metric.labels["pattern_hash"] == "" ||
+            metric.labels["container_id"].find("pem")) {
+            continue;
+        }
         std::string str = ToString(metric);
         LOG(WARNING) << absl::Substitute("metric=$0", str);
-
         std::string pattern_hash = metric.labels["pattern_hash"];
         auto prev = pattern_counts_.find(pattern_hash);
         auto delta = metric.val;
