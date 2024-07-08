@@ -46,18 +46,16 @@ void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* /*ctx*/,
 
     int64_t timestamp = AdjustedSteadyClockNowNS();
     std::string prom_text = FetchPrometheusMetrics("http://node-agent-service.coroot.svc.cluster.local:80/metrics");
-    LOG(INFO) << absl::Substitute("Fetched prom_text=$0", prom_text);
     std::vector<Metric> metrics = DecodeMetric(prom_text, "container_log_messages_total");
     for (auto& metric : metrics) {
 
-        if (metric.labels["sample"] == "" ||
-            metric.labels["pattern_hash"] == "" ||
-            metric.labels["container_id"].find("pem")) {
+        std::string pattern_hash = metric.labels["pattern_hash"];
+        std::string sample = metric.labels["sample"];
+        // This will be "" if a pattern_hash is not found.
+        if (pattern_hash.size() <= 2 ||
+            sample.size() <= 2) {
             continue;
         }
-        std::string str = ToString(metric);
-        LOG(WARNING) << absl::Substitute("metric=$0", str);
-        std::string pattern_hash = metric.labels["pattern_hash"];
         auto prev = pattern_counts_.find(pattern_hash);
         auto delta = metric.val;
         if (prev != pattern_counts_.end()) {
@@ -71,7 +69,7 @@ void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* /*ctx*/,
         r.Append<r.ColIndex("pattern_hash")>(pattern_hash);
         r.Append<r.ColIndex("source")>(metric.labels["source"]);
         r.Append<r.ColIndex("level")>(metric.labels["level"]);
-        r.Append<r.ColIndex("message")>(metric.labels["sample"]);
+        r.Append<r.ColIndex("message")>(sample);
         r.Append<r.ColIndex("count")>(delta);
     }
 }
