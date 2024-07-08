@@ -34,7 +34,14 @@ std::vector<Metric> DecodeMetric(const std::string& prom_text, const std::string
             std::string label_str = line.substr(line.find('{') + 1, line.find_last_of('}') - line.find('{') - 1);
             std::istringstream label_stream(label_str);
             std::string label;
+
             while (std::getline(label_stream, label, ',')) {
+                if (label_stream.peek() == '\\') {
+                    std::string cont;
+                    while (std::getline(label_stream, cont, ',')) {
+                        label += cont;
+                    }
+                }
                 std::string key = label.substr(0, label.find('='));
                 std::string val = label.substr(label.find('=') + 1);
                 metric.labels[key] = val;
