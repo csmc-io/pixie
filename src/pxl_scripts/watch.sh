@@ -52,7 +52,7 @@ cleanup() {
     kill "${SERVER_PID}"
   fi
   emph "Cleanup"
-  echo "Run ${tty_green}localStorage.clear('px-custom-bundle-paths')${tty_reset}"
+  echo "Run ${tty_green}localStorage.clear('px-custom-script-bundle-paths')${tty_reset}"
 }
 
 python3 cors_http_server.py &
@@ -62,7 +62,7 @@ trap 'cleanup' EXIT
 
 emph "Running dev server for pxl_scripts"
 echo "Open chrome console and add: "\
-     "${tty_green}localStorage.setItem('px-custom-bundle-paths',"\
+     "${tty_green}localStorage.setItem('px-custom-script-bundle-paths',"\
      "'["'"'"http://127.0.0.1:8000/bundle-oss.json"'"'"]')${tty_reset}"
 
 while sleep 1; do

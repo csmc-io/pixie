@@ -1,0 +1,4 @@
+---
+short: Log patterns for applications in your cluster
+long: >
+  This view displays the logs for all the applications in your cluster.
