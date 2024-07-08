@@ -174,6 +174,9 @@ def _cc_deps():
     # _local_repo("com_github_iovisor_bpftrace", build_file = "//bazel/external/local_dev:bpftrace.BUILD")
     _bazel_repo("com_github_iovisor_bcc", build_file = "//bazel/external:bcc.BUILD")
     _bazel_repo("com_github_iovisor_bpftrace", build_file = "//bazel/external:bpftrace.BUILD")
+    _bazel_repo("com_github_boostorg_beast", build_file = "//bazel/external:beast.BUILD")
+    _bazel_repo("com_github_curl_curl", build_file = "//bazel/external:curl.BUILD")
+    _bazel_repo("com_github_libcpr_cpr", build_file = "//bazel/external:cpr.BUILD", patches = ["//bazel/external:cpr.patch"])
 
     # TODO(jps): For jattach, consider using a patch and directly pulling from upstream (vs. fork).
     _git_repo("com_github_apangin_jattach", build_file = "//bazel/external:jattach.BUILD")

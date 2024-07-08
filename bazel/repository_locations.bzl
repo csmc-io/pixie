@@ -140,6 +140,27 @@ REPOSITORY_LOCATIONS = dict(
             "https://github.com/pixie-io/bpftrace/archive/460adf093c226a3013ff389cf9a2d84834018b9b.tar.gz",
         ],
     ),
+    com_github_libcpr_cpr = dict(
+        sha256 = "c8590568996cea918d7cf7ec6845d954b9b95ab2c4980b365f582a665dea08d8",
+        strip_prefix = "cpr-1.10.5",
+        urls = [
+            "https://github.com/libcpr/cpr/archive/refs/tags/1.10.5.tar.gz",
+        ],
+    ),
+    com_github_curl_curl = dict(
+        sha256 = "01ae0c123dee45b01bbaef94c0bc00ed2aec89cb2ee0fd598e0d302a6b5e0a98",
+        strip_prefix = "curl-7.69.1",
+        urls = [
+            "https://github.com/curl/curl/releases/download/curl-7_69_1/curl-7.69.1.tar.gz",
+        ],
+    ),
+    com_github_boostorg_beast = dict(
+        sha256 = "9fedb084b75a82ec20cd11aedc3cdc33a261cce0b644467db3e44964bba7c517",
+        strip_prefix = "beast-boost-1.85.0",
+        urls = [
+            "https://github.com/boostorg/beast/archive/refs/tags/boost-1.85.0.tar.gz",
+        ],
+    ),
     com_github_jupp0r_prometheus_cpp = dict(
         sha256 = "b4eff62bcdba10efd6210b9fa8a5b2505ad8ea6c211968be79aeb2c4c2f97338",
         strip_prefix = "prometheus-cpp-81e208c250748657f1d5dab247e82c4429a931af",
