@@ -47,7 +47,6 @@ std::vector<Metric> DecodeMetric(const std::string& prom_text, const std::string
                 metric.labels[key] = val;
             }
             std::string val_str = line.substr(line.find_last_of('}') + 1);
-            LOG(WARNING) << absl::Substitute("val_str=$0", val_str);
             metric.val = std::stoull(val_str);
             metrics.push_back(metric);
         }
