@@ -22,6 +22,12 @@ std::vector<Metric> DecodeMetric(const std::string& prom_text, const std::string
     std::string line;
     std::istringstream prom_text_stream(prom_text);
     while (std::getline(prom_text_stream, line)) {
+        auto first_non_whitespace = line.find_first_not_of(" \t");
+        if (first_non_whitespace != std::string::npos) {
+            if (line.substr(first_non_whitespace, 1) == "#") {
+                continue;
+            }
+        }
         if (line.find(metric_name) != std::string::npos) {
             Metric metric;
             metric.name = metric_name;
