@@ -39,7 +39,9 @@ class LogPatternsConnector : public SourceConnector {
   static constexpr auto kSamplingPeriod = std::chrono::milliseconds{1000};
   static constexpr auto kPushPeriod = std::chrono::milliseconds{1000};
   static constexpr auto kTables = MakeArray(kLogPatternsTable);
-  static constexpr uint32_t kProcStatsTableNum = TableNum(kTables, kLogPatternsTable);
+  static constexpr uint32_t kLogPatternsTableNum = TableNum(kTables, kLogPatternsTable);
+
+  std::map<std::string, uint64_t> pattern_counts_;
 
   LogPatternsConnector() = delete;
   ~LogPatternsConnector() override = default;

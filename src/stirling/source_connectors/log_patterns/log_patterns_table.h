@@ -35,7 +35,6 @@ namespace px {
 namespace stirling {
 
 // clang-format off
-// container_log_messages_total{container_id="/k8s/kube-system/kube-dns-bd76ffc78-68wdb/kubedns-metrics-collector",level="error",machine_id="c605c971c9d0a43aa7618dd79e5b2500",pattern_hash="d41d8cd98f00b204e9800998ecf8427e",sample="{\"level\":\"error\",\"ts\":1720186648.5371022,\"caller\":\"gcm/export.go:498\",\"msg\":\"Failed to export self-observability metrics to Cloud Monitoring\",\"error\":\"rpc error: code = PermissionDenied desc = Permission monitoring.timeSeries.create denied (or the resource may not exist).\",\"stacktrace\":\"google3/cloud/kubernetes/metrics/common/gcm/gcm.(*exporter).startSelfObservability\\n\\tcloud/kubernetes/metrics/common/gcm/export.go:498\"}",source="stdout/stderr",system_uuid="c605c971-c9d0-a43a-a761-8dd79e5b2500"} 18
 static constexpr DataElement kLogPatternsElements[] = {
         canonical_data_elements::kTime,
         /* canonical_data_elements::kUPID, */
@@ -43,7 +42,7 @@ static constexpr DataElement kLogPatternsElements[] = {
         {"pattern_hash", "Hash of the log pattern", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"source", "Source of the log message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"level", "Log level of the message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
-        {"message", "Log message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
+        {"message", "Sample of the log message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"count", "Number of occurrences of the log pattern", types::DataType::INT64, types::SemanticType::ST_NONE, types::PatternType::METRIC_COUNTER},
 };
 

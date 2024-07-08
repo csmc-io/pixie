@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "src/stirling/source_connectors/process_stats/process_stats_connector.h"
+#include "src/stirling/source_connectors/log_patterns/log_patterns_connector.h"
 
 #include <chrono>
 #include <filesystem>
@@ -24,6 +24,11 @@
 #include <string>
 
 #include "src/common/base/base.h"
+#include "src/shared/prometheus/decoder.h"
+
+using px::shared::prometheus::Metric;
+using px::shared::prometheus::DecodeMetric;
+using px::shared::prometheus::FetchPrometheusMetrics;
 
 namespace px {
 namespace stirling {
@@ -36,8 +41,33 @@ Status LogPatternsConnector::InitImpl() {
 
 Status LogPatternsConnector::StopImpl() { return Status::OK(); }
 
-void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* ctx,
+void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* /*ctx*/,
                                                       DataTable* data_table) {
+
+    int64_t timestamp = AdjustedSteadyClockNowNS();
+    std::string prom_text = FetchPrometheusMetrics("http://node-agent-service.coroot.svc.cluster.local:80/metrics");
+    std::vector<Metric> metrics = DecodeMetric(prom_text, "container_log_messages_total");
+    for (auto& metric : metrics) {
+        std::string str = ToString(metric);
+        LOG(WARNING) << absl::Substitute("metric=$0", str);
+
+        std::string pattern_hash = metric.labels["pattern_hash"];
+        auto prev = pattern_counts_.find(pattern_hash);
+        auto delta = metric.val;
+        if (prev != pattern_counts_.end()) {
+            delta = metric.val - prev->second;
+        }
+        pattern_counts_[pattern_hash] = metric.val;
+
+        DataTable::RecordBuilder<&kLogPatternsTable> r(data_table, timestamp);
+        r.Append<r.ColIndex("time_")>(timestamp);
+        r.Append<r.ColIndex("container_id")>(metric.labels["container_id"]);
+        r.Append<r.ColIndex("pattern_hash")>(pattern_hash);
+        r.Append<r.ColIndex("source")>(metric.labels["source"]);
+        r.Append<r.ColIndex("level")>(metric.labels["level"]);
+        r.Append<r.ColIndex("message")>(metric.labels["sample"]);
+        r.Append<r.ColIndex("count")>(delta);
+    }
 }
 
 void LogPatternsConnector::TransferDataImpl(ConnectorContext* ctx) {

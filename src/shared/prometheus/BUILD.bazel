@@ -14,9 +14,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-load("//bazel:pl_build_system.bzl", "pl_cc_library")
+load("//bazel:pl_build_system.bzl", "pl_cc_library", "pl_cc_test")
 
-package(default_visibility = ["//src/stirling:__subpackages__"])
+package(default_visibility = ["//visibility:public"])
 
 pl_cc_library(
     name = "cc_library",
@@ -28,8 +28,12 @@ pl_cc_library(
     ),
     hdrs = glob(["*.h"]),
     deps = [
-        "//src/shared/prometheus:cc_library",
-        "//src/stirling/core:cc_library",
         "@com_github_libcpr_cpr//:cpr",
-    ],
+    ]
+)
+
+pl_cc_test(
+    name = "decoder_test",
+    srcs = ["decoder_test.cc"],
+    deps = [":cc_library"],
 )
