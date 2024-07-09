@@ -56,20 +56,21 @@ void LogPatternsConnector::TransferLogPatternsTable(ConnectorContext* /*ctx*/,
             sample.size() <= 2) {
             continue;
         }
-        auto prev = pattern_counts_.find(pattern_hash);
+        std::string key = absl::StrCat(pattern_hash, metric.labels["container_id"]);
+        auto prev = pattern_counts_.find(key);
         auto delta = metric.val;
         if (prev != pattern_counts_.end()) {
             delta = metric.val - prev->second;
         }
-        pattern_counts_[pattern_hash] = metric.val;
+        pattern_counts_[key] = metric.val;
 
         DataTable::RecordBuilder<&kLogPatternsTable> r(data_table, timestamp);
         r.Append<r.ColIndex("time_")>(timestamp);
+        r.Append<r.ColIndex("message")>(sample);
         r.Append<r.ColIndex("container_id")>(metric.labels["container_id"]);
         r.Append<r.ColIndex("pattern_hash")>(pattern_hash);
         r.Append<r.ColIndex("source")>(metric.labels["source"]);
         r.Append<r.ColIndex("level")>(metric.labels["level"]);
-        r.Append<r.ColIndex("message")>(sample);
         r.Append<r.ColIndex("count")>(delta);
     }
 }

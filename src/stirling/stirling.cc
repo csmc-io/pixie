@@ -98,7 +98,6 @@ std::vector<std::string_view> GetSourceNamesForGroup(SourceConnectorGroup group)
         NetworkStatsConnector::kName,
         JVMStatsConnector::kName,
         SocketTraceConnector::kName,
-        PerfProfileConnector::kName,
         proc_exit_tracer::ProcExitConnector::kName,
         StirlingErrorConnector::kName,
         LogPatternsConnector::kName,

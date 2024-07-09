@@ -38,11 +38,11 @@ namespace stirling {
 static constexpr DataElement kLogPatternsElements[] = {
         canonical_data_elements::kTime,
         /* canonical_data_elements::kUPID, */
+        {"message", "Sample of the log message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"container_id", "ID of the container", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"pattern_hash", "Hash of the log pattern", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"source", "Source of the log message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"level", "Log level of the message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
-        {"message", "Sample of the log message", types::DataType::STRING, types::SemanticType::ST_NONE, types::PatternType::GENERAL},
         {"count", "Number of occurrences of the log pattern", types::DataType::INT64, types::SemanticType::ST_NONE, types::PatternType::METRIC_COUNTER},
 };
 
