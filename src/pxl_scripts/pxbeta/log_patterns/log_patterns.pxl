@@ -19,37 +19,22 @@
 import px
 
 
-def http_data(start_time: str, source_filter: str, destination_filter: str, num_head: int):
+def log_pattern_data(start_time: str, source_filter: str, destination_filter: str, num_head: int):
 
     df = px.DataFrame(table='log_patterns', start_time=start_time)
 
-    # Add context.
-    # df.node = df.ctx['node']
-    # df.pid = px.upid_to_pid(df.upid)
-    # df = add_source_dest_columns(df)
-    # df = add_source_dest_links(df, start_time)
-
-    # # Filter out entities as specified by the user.
-    # df = df[px.contains(df.source, source_filter)]
-    # df = df[px.contains(df.destination, destination_filter)]
-
-    # # Add additional filters below:
-
-    # # Restrict number of results.
-    # df = df.head(num_head)
-
-    df = df[px.length(df.source) > 2]
     df = df[df.count > 0]
     df = df[px.contains(df.container_id, "/k8s")]
     # "/k8x/px-sock-shop/orders-55b59dd995-rfl4d
-    
-    # # Order columns.
-    # df = df['time_', 'source', 'destination', 'latency', 'major_version', 'req_path',
-    #         'req_method', 'req_headers', 'req_body', 'req_body_size', 'resp_status',
-    #         'resp_message', 'resp_headers', 'resp_body', 'resp_body_size']
 
     # df.time_ = px.bin(df.time_, 60000000000)
     return df
+
+def log_pattern_grouped_by(start_time: str, source_filter: str, destination_filter: str, num_head: int):
+    df = log_pattern_data(start_time, source_filter, destination_filter, num_head)
+    df = df.groupby(['container_id', 'pattern_hash']).agg(total=('count', px.sum), sample=('message', px.any))
+    return df.head(num_head)
+
 
 
 def add_source_dest_columns(df):

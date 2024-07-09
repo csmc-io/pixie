@@ -27,9 +27,33 @@
     ],
     "globalFuncs": [
         {
-            "outputName": "http_data",
+            "outputName": "log_pattern_data",
             "func": {
-                "name": "http_data",
+                "name": "log_pattern_data",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    },
+                    {
+                        "name": "source_filter",
+                        "variable": "source_filter"
+                    },
+                    {
+                        "name": "destination_filter",
+                        "variable": "destination_filter"
+                    },
+                    {
+                        "name": "num_head",
+                        "variable": "max_num_records"
+                    }
+                ]
+            }
+        },
+        {
+            "outputName": "log_pattern_grouped_by",
+            "func": {
+                "name": "log_pattern_grouped_by",
                 "args": [
                     {
                         "name": "start_time",
@@ -53,29 +77,16 @@
     ],
     "widgets": [
         {
-            "name": "Table",
-            "position": {
-                "x": 0,
-                "y": 0,
-                "w": 12,
-                "h": 4
-            },
-            "globalFuncOutputName": "http_data",
-            "displaySpec": {
-                "@type": "types.px.dev/px.vispb.Table"
-            }
-        },
-        {
             "name": "Time series",
-            "globalFuncOutputName": "http_data",
+            "globalFuncOutputName": "log_pattern_data",
             "displaySpec": {
-                "@type": "types.px.dev/px.vispb.BarChart",
-                "bar": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [{
                     "value": "count",
-                    "stackBy": "container_id",
-                    "label": "level",
-                    "horizontal": false
-                },
+                    "series": "container_id",
+                    "mode": "MODE_AREA",
+                    "stackBySeries": "level"
+                }],
                 "title": "",
                 "yAxis": {
                     "label": "Log pattern counts"
@@ -84,9 +95,22 @@
             },
             "position": {
                 "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 4
+            }
+        },
+        {
+            "name": "Table",
+            "position": {
+                "x": 0,
                 "y": 3,
                 "w": 12,
                 "h": 4
+            },
+            "globalFuncOutputName": "log_pattern_grouped_by",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.Table"
             }
         }
     ]
