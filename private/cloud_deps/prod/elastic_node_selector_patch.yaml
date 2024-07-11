@@ -1,0 +1,11 @@
+---
+- op: test
+  path: /spec/nodeSets/0/podTemplate/spec/nodeSelector/node-size
+  value: large
+- op: test
+  path: /spec/nodeSets/1/podTemplate/spec/nodeSelector/node-size
+  value: large
+- op: remove
+  path: /spec/nodeSets/0/podTemplate/spec/nodeSelector
+- op: remove
+  path: /spec/nodeSets/1/podTemplate/spec/nodeSelector

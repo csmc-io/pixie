@@ -1,0 +1,6 @@
+- op: test
+  path: /spec/template/spec/containers/0/image
+  value: gcr.io/pixie-prod/cloud/plugin/load_db:0.0.1
+- op: replace
+  path: /spec/template/spec/containers/0/image
+  value: cloud-plugin-load_db:latest

@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     cursor: 'pointer',
   },
   logoContainer: {
-    height: theme.spacing(3),
+    height: theme.spacing(5),
   },
   managedDomainBanner: {
     background: theme.palette.background.two,

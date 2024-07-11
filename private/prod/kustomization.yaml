@@ -1,0 +1,40 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: plc
+resources:
+- ../../k8s/cloud/prod
+- pod_monitoring.yaml
+patches:
+- path: node_selector_patch.yaml
+  target:
+    kind: Deployment
+- path: deletions/db_config.yaml
+- path: domain_config.yaml
+- path: script_bundles_config.yaml
+- path: backend_config.yaml
+  target:
+    kind: BackendConfig
+- path: proxy_envoy.yaml
+- path: bq_config.yaml
+- path: db_sidecar.yaml
+  target:
+    kind: Deployment
+    labelSelector: db=pgsql
+- path: auth_deployment.yaml
+- path: cloud_ingress.yaml
+  target:
+    kind: Ingress
+    name: cloud-ingress
+- path: use_cosmic_domains.yaml
+  target:
+    kind: ManagedCertificate
+    name: cloud-ingress-managed-cert
+- path: use_cosmic_domains.yaml
+  target:
+    kind: ManagedCertificate
+    name: cloud-ingress-managed-cert-noslackin
+- path: plugin_job_image_override.yaml
+  target:
+    kind: Job
+    name: plugin-db-updater-job

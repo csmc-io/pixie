@@ -28,10 +28,15 @@ core.workflow(
             "*",
         ],
         exclude = [
+            ".arclint", # TODO(ddelnano): Remove once the issues are addressed
             ".git/**",
             ".github/workflows/**",
             "tools/licenses/checker.py",
             "ci/run_copybara.sh", # TODO(ddelnano): Remove once this is upstream
+            "src/ui/src/containers/App/topbar.tsx",
+            "src/ui/src/containers/auth/auth-box.tsx",
+            "src/ui/assets/images/favicon-base.png",
+            "src/ui/assets/images/cosmic-*",
         ],
     ),
     destination_files = glob(
