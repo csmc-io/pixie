@@ -1,0 +1,11 @@
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: pod-monitoring
+spec:
+  selector:
+    matchLabels:
+      prometheus.io/scrape: 'true'
+  endpoints:
+  - port: metrics-http
+    interval: 60s

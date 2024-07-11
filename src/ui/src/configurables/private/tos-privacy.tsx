@@ -18,12 +18,15 @@
 
 import * as React from 'react';
 
+export const termsUri = 'https://csmc.ai/docs/terms-and-conditions/tos/';
+export const privacyUri = 'https://csmc.ai/docs/terms-and-conditions/privacy-policy/';
+
 export const TermsAndPrivacy = React.memo<{ classes: Record<'text', string> }>(({ classes }) => {
   return (<>
-    <a href='https://csmc.ai/docs/terms-and-conditions/tos/' className={classes.text}>
+    <a href={termsUri} className={classes.text}>
       Terms & Conditions
     </a>
-    <a href='https://csmc.ai/docs/terms-and-conditions/privacy-policy/' className={classes.text}>
+    <a href={privacyUri} className={classes.text}>
       Privacy Policy
     </a>
   </>);

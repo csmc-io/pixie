@@ -1,0 +1,6 @@
+---
+- op: test
+  path: /spec/template/spec/nodeSelector/node-size
+  value: large
+- op: remove
+  path: /spec/template/spec/nodeSelector

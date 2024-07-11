@@ -1,0 +1,7 @@
+---
+- op: test
+  path: /spec/template/spec/containers/0/name
+  value: cloudsql-proxy
+- op: replace
+  path: /spec/template/spec/containers/0/args/3
+  value: "csmc-prod:us-west1:prod-cloud-db-15"

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pl-script-bundles-config
+data:
+  SCRIPT_BUNDLE_URLS: >-
+    [
+    "https://ddelnano.github.io/pixie/pxl_scripts/bundle.json"
+    ]
+  SCRIPT_BUNDLE_DEV: "false"

@@ -1,0 +1,7 @@
+---
+- op: test
+  path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+  value: 200Gi
+- op: replace
+  path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+  value: 50Gi
