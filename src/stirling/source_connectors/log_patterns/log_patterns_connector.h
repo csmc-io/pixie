@@ -36,8 +36,8 @@ namespace stirling {
 class LogPatternsConnector : public SourceConnector {
  public:
   static constexpr std::string_view kName = "log_patterns";
-  static constexpr auto kSamplingPeriod = std::chrono::milliseconds{5 * 60 * 1000};
-  static constexpr auto kPushPeriod = std::chrono::milliseconds{5 * 60 * 1000};
+  static constexpr auto kSamplingPeriod = std::chrono::milliseconds{1000};
+  static constexpr auto kPushPeriod = std::chrono::milliseconds{1000};
   static constexpr auto kTables = MakeArray(kLogPatternsTable);
   static constexpr uint32_t kLogPatternsTableNum = TableNum(kTables, kLogPatternsTable);
 
