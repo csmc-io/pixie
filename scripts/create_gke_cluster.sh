@@ -29,7 +29,7 @@ set_default_values() {
   NUM_NODES=2
   MIN_NODES=1
   MAX_NODES=5
-  MACHINE_TYPE=e2-standard-2
+  MACHINE_TYPE=e2-standard-4
   IMAGE_NAME=COS_CONTAINERD
   DISK_SIZE=100
   LABELS="k8s-dev-cluster="
@@ -37,10 +37,10 @@ set_default_values() {
 
 # Configuration for personal Pixie dev clusters.
 set_pixies_cluster_config() {
-  PROJECT=csmc-dev
+  PROJECT=pl-pixies
   ZONE=us-west1-a
-  NETWORK=projects/csmc-dev/global/networks/dev
-  SUBNETWORK_ARGS=(--subnetwork projects/csmc-dev/regions/us-west1/subnetworks/dev-subnet)
+  NETWORK=projects/pl-pixies/global/networks/dev
+  SUBNETWORK_ARGS=(--subnetwork projects/pl-pixies/regions/us-west1/subnetworks/us-west1-0)
 }
 
 # Configuration for Pixie cloud (prod) cluster.
