@@ -38,9 +38,8 @@ core.workflow(
         exclude = [
             "scripts/create_gke_cluster.sh",
             "src/ui/src/containers/App/topbar.tsx",
-            "src/ui/assets/images/favicon-base.png",
+            "src/ui/assets/favicon-base.png",
             "src/ui/assets/images/cosmic-*",
-            ".arclint", # TODO(ddelnano): Remove once the issues are addressed
             ".git/**",
             ".github/workflows/**",
             "tools/licenses/checker.py",
@@ -52,7 +51,7 @@ core.workflow(
         exclude = [
             "scripts/create_gke_cluster.sh",
             "src/ui/src/containers/App/topbar.tsx",
-            "src/ui/assets/images/favicon-base.png",
+            "src/ui/assets/favicon-base.png",
             "src/ui/assets/images/cosmic-*",
             "**/private/**",
             "private/**",
