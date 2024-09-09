@@ -36,6 +36,7 @@ core.workflow(
             "*",
         ],
         exclude = [
+            "k8s/cloud_deps/prod/elastic/elastic_storage_patch.yaml",
             "k8s/cloud_deps/testing/elastic/elastic_storage_patch.yaml",
             "k8s/cloud_deps/testing/nats/storage_patch.yaml",
             "scripts/create_gke_cluster.sh",
@@ -51,6 +52,7 @@ core.workflow(
     destination_files = glob(
         ["**"],
         exclude = [
+            "k8s/cloud_deps/prod/elastic/elastic_storage_patch.yaml",
             "k8s/cloud_deps/testing/elastic/elastic_storage_patch.yaml",
             "k8s/cloud_deps/testing/nats/storage_patch.yaml",
             "scripts/create_gke_cluster.sh",
