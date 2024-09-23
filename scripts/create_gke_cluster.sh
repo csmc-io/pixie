@@ -26,10 +26,10 @@ set_default_values() {
   CLUSTER_NAME="dev-cluster-${USER}"
   AUTOSCALING=true
   DYNAMIC_SUBNET=false
-  NUM_NODES=2
+  NUM_NODES=1
   MIN_NODES=1
   MAX_NODES=5
-  MACHINE_TYPE=e2-standard-2
+  MACHINE_TYPE=e2-highmem-2
   IMAGE_NAME=COS_CONTAINERD
   DISK_SIZE=100
   LABELS="k8s-dev-cluster="
