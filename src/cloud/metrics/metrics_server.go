@@ -49,6 +49,7 @@ func init() {
 
 	pflag.String("bq_dataset", "vizier_metrics", "The BigQuery dataset to write metrics to.")
 	pflag.String("bq_dataset_loc", "", "The location for the BigQuery dataset. Used during creation.")
+	pflag.Bool("bq_disabled", false, "Whether the bigquery export should be disabled")
 
 	natsErrorCounter = messages.NewNatsErrorCounter()
 }
@@ -100,7 +101,7 @@ func main() {
 		if apiError.Code != http.StatusConflict {
 			log.WithError(err).Fatal("Problem with BigQuery dataset")
 		}
-		mc := controllers.NewServer(nc, dataset)
+		mc := controllers.NewServer(nc, dataset, viper.GetBool("bq_disabled"))
 		mc.Start()
 		defer mc.Stop()
 	} else {
