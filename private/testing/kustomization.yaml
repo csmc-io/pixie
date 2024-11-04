@@ -19,6 +19,10 @@ patches:
   target:
     kind: Deployment
     labelSelector: db=pgsql
+- path: indexer_config.yaml
+  target:
+    kind: ConfigMap
+    name: pl-indexer-config
 - path: internal_lb_service.yaml
   target:
     kind: Service

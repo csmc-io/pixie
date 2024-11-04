@@ -1,0 +1,3 @@
+- op: replace
+  path: /data/PL_MD_INDEX_NAME
+  value: md_entities_10
