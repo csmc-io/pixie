@@ -4,6 +4,7 @@ kind: ConfigMap
 metadata:
   name: pl-bq-config
 data:
+  PL_BQ_DISABLED: "true"
   PL_BQ_PROJECT: "csmc-prod"
   PL_BQ_DATASET: "pixie_vizier_prod"
   PL_BQ_DATASET_LOC: "us-west1"
