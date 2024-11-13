@@ -56,21 +56,23 @@ type Row struct {
 
 // Server defines an metrics server type.
 type Server struct {
-	nc        *nats.Conn
-	bqDataset *bigquery.Dataset
-	schema    bigquery.Schema
+	nc            *nats.Conn
+	bqDataset     *bigquery.Dataset
+	disableExport bool
+	schema        bigquery.Schema
 
 	done chan struct{}
 	once sync.Once
 }
 
 // NewServer creates a server.
-func NewServer(nc *nats.Conn, bqDataset *bigquery.Dataset) *Server {
+func NewServer(nc *nats.Conn, bqDataset *bigquery.Dataset, disableExport bool) *Server {
 	return &Server{
 		nc:        nc,
 		bqDataset: bqDataset,
 
-		done: make(chan struct{}),
+		done:          make(chan struct{}),
+		disableExport: disableExport,
 	}
 }
 
@@ -145,6 +147,9 @@ func (s *Server) startShardedHandler(shard string, bqWriteChan chan<- interface{
 				sub.Unsubscribe()
 				return
 			case msg := <-natsCh:
+				if s.disableExport {
+					continue
+				}
 				pb := &cvmsgspb.V2CMessage{}
 				err := proto.Unmarshal(msg.Data, pb)
 				if err != nil {
