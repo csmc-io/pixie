@@ -32,6 +32,9 @@ core.workflow(
             "k8s/cloud_deps/testing/elastic/elastic_storage_patch.yaml",
             "k8s/cloud_deps/testing/nats/storage_patch.yaml",
             "scripts/create_gke_cluster.sh",
+            # TODO(ddelnano): Upstream this at some point. Commit d1bb3b0
+            "src/cloud/metrics/metrics_server.go",
+            "src/cloud/metrics/controllers/server.go",
             "src/ui/src/containers/App/topbar.tsx",
             "src/ui/assets/favicon-base.png",
             "src/ui/assets/images/cosmic-*",
@@ -48,6 +51,9 @@ core.workflow(
             "k8s/cloud_deps/testing/elastic/elastic_storage_patch.yaml",
             "k8s/cloud_deps/testing/nats/storage_patch.yaml",
             "scripts/create_gke_cluster.sh",
+            # TODO(ddelnano): Upstream this at some point. Commit d1bb3b0
+            "src/cloud/metrics/metrics_server.go",
+            "src/cloud/metrics/controllers/server.go",
             "src/ui/src/containers/App/topbar.tsx",
             "src/ui/assets/favicon-base.png",
             "src/ui/assets/images/cosmic-*",
