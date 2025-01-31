@@ -1,0 +1,5 @@
+---
+short: File Sources Overview
+long: >
+  Returns information about file sources running on the
+  cluster.
