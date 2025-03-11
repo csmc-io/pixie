@@ -76,18 +76,6 @@ class URIParseUDF : public udf::ScalarUDF {
     return sb.GetString();
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Parses the URI into it's component parts and returns the parts "
-               "as a JSON string.")
-        .Example(R"doc(
-        | df.uri = 'https://px.dev/community/?param1=val1'
-        | df.parsed = px.uri_parse(df.uri)
-        | df.path = px.pluck(df.parsed, 'path') # /community/
-        )doc")
-        .Arg("uri", "The uri to parse.")
-        .Returns("A JSON string representation with the URI parts.");
-  }
 
  private:
   void WriteKeyVal(rapidjson::Writer<rapidjson::StringBuffer>* writer, const char* key,
@@ -159,20 +147,6 @@ class URIRecomposeUDF : public udf::ScalarUDF {
     return output;
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Recomposes the URI parts int a URI.")
-        .Example(R"doc(
-        | df.uri = px.uri_recompose('https', '', 'px.dev', 0, '/community/', 'param1=val1', '') # https://px.dev/community/?param1=val1
-        )doc")
-        .Arg("scheme", "The scheme for the URI.")
-        .Arg("userInfo", "The userInfo for the URI.")
-        .Arg("host", "The host for the URI.")
-        .Arg("port", "The port for the URI.")
-        .Arg("path", "The path for the URI.")
-        .Arg("query", "The query for the URI.")
-        .Arg("fragment", "The fragment for the URI.")
-        .Returns("A fully composed URI.");
-  }
 
  private:
   void SetURITextRange(StringValue* val, UriTextRangeA* range) {

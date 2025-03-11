@@ -74,14 +74,6 @@ class GRPCStatusToStringUDF : public udf::ScalarUDF {
     return "unknown code";
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Converts the GRPC status code into a readable string error.")
-        .Example(R"doc(
-        | df.err_reason = px.grpc_status_code_to_str(12)
-        )doc")
-        .Arg("status_code", "The GRPC status code to convert.")
-        .Returns("A string representation of the GRPC status code.");
-  }
 };
 
 void RegisterUtilOpsOrDie(udf::Registry* registry);

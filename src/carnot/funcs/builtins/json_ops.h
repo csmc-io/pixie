@@ -64,24 +64,6 @@ class PluckUDF : public udf::ScalarUDF {
     plucked_value.Accept(writer);
     return sb.GetString();
   }
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Grabs the value for the key value the serialized JSON string and returns as a "
-               "string.")
-        .Details(
-            "Convenience method to handle grabbing keys from a serialized JSON string. The "
-            "function parses the JSON string and attempts to find the key. If the key is not "
-            "found, an empty string is returned.\n"
-            "This function returns the value as a string. If you want an int, use "
-            "`px.pluck_int64`. If you want a float, use `px.pluck_float64`.")
-        .Example(R"doc(
-        | df.quantiles = '{"p50": 5.1, "p90": 10}'
-        | df.p50 = px.pluck(df.quantiles, 'p50') # "5.1", as a string.
-        )doc")
-        .Arg("json_str", "JSON data serialized as a string.")
-        .Arg("key", "The key to get the value for.")
-        .Returns("The value for the key as a string.");
-  }
 };
 
 class PluckAsInt64UDF : public udf::ScalarUDF {
@@ -108,24 +90,6 @@ class PluckAsInt64UDF : public udf::ScalarUDF {
     }
     return 0;
   }
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Grabs the value for the key from the serialized JSON string and returns as an int.")
-        .Details(
-            "Convenience method to handle grabbing keys from a serialized JSON string. The "
-            "function parses the JSON string and attempts to find the key. If the key is not "
-            "found, 0 is returned. If the key is found, but the value cannot be parsed as an int, "
-            "returns a 0.\n"
-            "This function returns the value as an int. If you want a string, use `px.pluck`. If "
-            "you want a float, use `px.pluck_float64`.")
-        .Example(R"doc(
-        | df.http_data = '{"status_code": 200, "p50_latency": 5.1}'
-        | df.status_code = px.pluck_int64(df.http_data, 'status_code') # 200
-        )doc")
-        .Arg("json_str", "JSON data serialized as a string.")
-        .Arg("key", "The key to get the value for.")
-        .Returns("The value for the key as an int.");
-  }
 };
 
 class PluckAsFloat64UDF : public udf::ScalarUDF {
@@ -151,27 +115,6 @@ class PluckAsFloat64UDF : public udf::ScalarUDF {
       return plucked_value.GetDouble();
     }
     return 0.0;
-  }
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Grabs the value for the key from the serialized JSON string and returns as a "
-               "float.")
-        .Details(
-            "Convenience method to handle grabbing keys from a serialized JSON string. The "
-            "function parses the JSON string and attempts to find the key. If the key is not "
-            "found, 0.0 is returned. If the key is found, but the value cannot be parsed as an "
-            "int, "
-            "returns a 0.0.\n"
-            "This function returns the value as a float. If you want a string, use `px.pluck`. "
-            "If "
-            "you want an int, use `px.pluck_int64`.")
-        .Example(R"doc(
-        | df.http_data = '{"status_code": 200, "p50_latency": 5.1}'
-        | df.p50_latency = px.pluck_float64(df.http_data, 'p50_latency') # 5.1
-        )doc")
-        .Arg("json_str", "JSON data serialized as a string.")
-        .Arg("key", "The key to get the value for.")
-        .Returns("The value for the key as a float");
   }
 };
 
@@ -206,26 +149,6 @@ class PluckArrayUDF : public udf::ScalarUDF {
     plucked_value.Accept(writer);
     return sb.GetString();
   }
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Grabs the ith value in the array from the serialized JSON string and "
-               "returns as a string.")
-        .Details(
-            "Convenience method to handle grabbing the ith item in an array from a serialized JSON "
-            "string. The function parses the array JSON string and attempts to find the ith "
-            "element. If the JSON string is not an array, or the index is out of range, an empty "
-            "string is returned.\n"
-            "This function returns the ith element as a string.")
-        .Example(R"doc(
-          | df.json = '{"names": ["foo", "bar"]}'
-          | df.names = px.pluck(df.json, "names") # Returns ["foo", "bar"]
-          | df.name0 = px.pluck_array(df.names, 0) # Returns "foo"
-          | df.name5 = px.pluck_array(df.names, 5) # Returns ""
-      )doc")
-        .Arg("json_str", "JSON data serialized as a string.")
-        .Arg("index", "The index of the value in the array.")
-        .Returns("The value at the ith position in the array as a string.");
-  }
 };
 
 class SplitUDF : public udf::ScalarUDF {
@@ -243,25 +166,6 @@ class SplitUDF : public udf::ScalarUDF {
     return sb.GetString();
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Splits a string by a delimiter and a returns JSON encoded array of strings.")
-        .Details(
-            "This function splits a string by a delimiter and returns a JSON encoded array of "
-            "strings. The function is useful for splitting strings and then passing the result to "
-            "px.pluck_array in order to access individual values of a delimited string.")
-        .Example(R"doc(
-          | df = px.DataFrame('http_events', start_time='-5m')
-          | # Returns By=http://frontend.px.dev;URI=http://testclient.px.dev
-          | df.xfcc_hdr = px.pluck(df.req_headers, 'X-Forwarded-Client-Cert')
-          | df.xfcc_parts = px.split(df.xfcc_hdr, ';')
-          | df.by = px.pluck_array(df.xfcc_parts, 0) # Returns "By=http://frontend.px.dev"
-          | df.uri = px.pluck_array(df.xfcc_parts, 1) # Returns "URI=http://testclient.px.dev"
-      )doc")
-        .Arg("input_str", "The string to split.")
-        .Arg("delimiter", "The string value to split the input string.")
-        .Returns("A JSON encoded array of the split strings.");
-  }
 };
 
 /**

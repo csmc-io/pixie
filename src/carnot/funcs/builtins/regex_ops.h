@@ -53,21 +53,6 @@ class RegexMatchUDF : public udf::ScalarUDF {
     return RE2::FullMatch(input, *regex_);
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Check for a match to a regex pattern in a string.")
-        .Details(
-            "This function checks the input string (second arg) for a match with the regex pattern "
-            "(first arg). "
-            "The regex pattern must match the full string. For example, the pattern 'abc' doesn't "
-            "match the string 'abcd' but the pattern 'abc*' does match that string. "
-            "We support google RE2 syntax. More details on that syntax can be found "
-            "[here](https://github.com/google/re2/wiki/Syntax). ")
-        .Example("df.is_match = px.regex_match('.*my_regex_pattern.*', df.resp_body)")
-        .Arg("arg1", "The regex pattern to match.")
-        .Arg("arg2", "The string column to match the pattern against.")
-        .Returns("boolean representing whether the pattern matched the input or not.");
-  }
-
  private:
   std::unique_ptr<re2::RE2> regex_;
 };
@@ -92,26 +77,6 @@ class RegexReplaceUDF : public udf::ScalarUDF {
     return input;
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Replace all matches of a regex pattern in a string with another string.")
-        .Details(
-            "This function replaces all matches of the regex pattern (first arg) in the string "
-            "(second arg) with the substitution string (third arg). "
-            "We support google RE2 syntax. More details on that syntax can be found "
-            "[here](https://github.com/google/re2/wiki/Syntax). "
-            "Note that numbered capture groups are supported and can be accessed in the "
-            "substitution string with \\1...\\N. See the google RE2 docs for more details on "
-            "capture "
-            "groups. However, named capture groups are not supported.")
-        .Example(R"(df.replaced_str = px.replace('10\.0\.0\.[0-9]+', df.resp_body, 'IP_ADDR'))")
-        .Arg("arg1", "The regex pattern to replace.")
-        .Arg("arg2", "The string column to replace pattern occurrences in.")
-        .Arg("arg3", "The string to replace the pattern with.")
-        .Returns(
-            "The original string with all occurrences of the pattern replaced by the substitution "
-            "string.");
-  }
 
  private:
   std::unique_ptr<re2::RE2> regex_;
@@ -148,26 +113,6 @@ class MatchRegexRule : public udf::ScalarUDF {
     return "";
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder(
-               "Check for a match to a json of regex pattern rules in a string.")
-        .Details(
-            "This function checks the input string (second arg) for a match with the regex pattern "
-            "rules"
-            "(first arg). "
-            "The regex pattern must match the full string. For example, the pattern 'abc' doesn't "
-            "match the string 'abcd' but the pattern 'abc*' does match that string. "
-            "We support google RE2 syntax. More details on that syntax can be found "
-            "[here](https://github.com/google/re2/wiki/Syntax). ")
-        .Example(
-            "df.is_match = px.regex_match('{\"rule1\": \".*my_regex_pattern.*\"}', df.resp_body)")
-        .Arg("arg1",
-             "The encoded json map from the name of the rule to the regex pattern for the rule.")
-        .Arg("arg2", "The string column to match the pattern against.")
-        .Returns(
-            "string representing the name of the first rule that matched or an empty string if no "
-            "match.");
-  }
 
  private:
   int regex_rules_length = 0;

@@ -45,13 +45,6 @@ class NSLookupUDF : public ScalarUDF {
  public:
   StringValue Exec(FunctionContext*, StringValue addr) { return cache_.Lookup(addr); }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Perform a DNS lookup for the value (experimental).")
-        .Details("Experimental UDF to perform a DNS lookup for a given value.")
-        .Arg("addr", "An IP address")
-        .Example("df.hostname = px.nslookup(df.ip_addr)")
-        .Returns("The hostname.");
-  }
 
  private:
   internal::DNSCache& cache_ = internal::DNSCache::GetInstance();
@@ -97,21 +90,6 @@ class CIDRsContainIPUDF : public ScalarUDF {
       }
     }
     return false;
-  }
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Determine whether an IP is contained in a set of CIDR ranges.")
-        .Details(
-            "Determine whether the given IP is within anyone of the CIDR ranges provided. For "
-            "example, 10.0.0.1 is contained in the CIDR range 10.0.0.0/24.")
-        .Arg("cidrs",
-             "Json array of CIDR ranges, where each CIDR range is a string of format "
-             "'<IP>/<prefix_length>'")
-        .Arg("ip_addr", "IP address to check for presence in range.")
-        .Example(
-            "df.cluster_cidrs = px.get_cidrs()"
-            "| df.ip_is_in_cluster = px.cidrs_contain_ip(df.cluster_cidrs, df.remote_addr)")
-        .Returns(
-            "boolean representing whether the given IP is in any one of the given CIDR ranges.");
   }
 
  private:

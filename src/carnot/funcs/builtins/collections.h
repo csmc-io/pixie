@@ -110,17 +110,6 @@ class AnyUDA : public udf::UDA {
     return Status::OK();
   }
 
-  static udf::UDADocBuilder Doc() {
-    return udf::UDADocBuilder("Picks any single value.")
-        .Details("Picks a value from the collection. No guarantees on which value is picked.")
-        .Example(R"doc(
-        | # Calculate any value from the collection.
-        | df = df.agg(latency_dist=('val', px.any))
-        )doc")
-        .Arg("val", "The data to select the value from.")
-        .Returns("The a single record selected from the above val.");
-  }
-
  protected:
   TArg val_;
   bool picked = false;

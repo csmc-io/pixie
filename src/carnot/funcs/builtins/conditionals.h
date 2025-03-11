@@ -47,18 +47,6 @@ class SelectUDF : public udf::ScalarUDF {
     // Match the 1st and 2nd arg.
     return {udf::InheritTypeFromArgs<SelectUDF>::CreateGeneric({1, 2})};
   }
-
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Selects value based on the first argument.")
-        .Example(R"doc(
-        | # Explicit call.
-        | df.val = px.select(df.select_left, df.left, df.right)
-        )doc")
-        .Arg("s", "The selector value")
-        .Arg("v1", "The return value when s is true")
-        .Arg("v2", "The return value when s is false")
-        .Returns("Return v1 if s else v2");
-  }
 };
 
 }  // namespace builtins

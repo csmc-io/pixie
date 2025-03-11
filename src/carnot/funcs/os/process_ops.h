@@ -50,13 +50,6 @@ class SharedLibrariesUDF : public ScalarUDF {
     return internal::GetSharedLibraries(upid);
   }
 
-  static udf::ScalarUDFDocBuilder Doc() {
-    return udf::ScalarUDFDocBuilder("Get the shared libraries for a given pid.")
-        .Details("Get the shared libraries for a given pid.")
-        .Arg("pid", "The process ID")
-        .Example("df.libraries = px.shared_libraries(df.pid)")
-        .Returns("Stringified vector of shared libraries.");
-  }
 };
 
 void RegisterProcessOpsOrDie(px::carnot::udf::Registry* registry);

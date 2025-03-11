@@ -29,32 +29,8 @@ namespace funcs {
 namespace md {
 
 void RegisterFuncsOrDie(const VizierFuncFactoryContext& ctx, carnot::udf::Registry* registry) {
-  registry->RegisterFactoryOrDie<GetTables, UDTFWithMDFactory<GetTables>>("GetTables", ctx);
-  registry->RegisterFactoryOrDie<GetTableSchemas, UDTFWithMDFactory<GetTableSchemas>>("GetSchemas",
-                                                                                      ctx);
   registry->RegisterFactoryOrDie<GetAgentStatus, UDTFWithMDFactory<GetAgentStatus>>(
       "GetAgentStatus", ctx);
-  registry->RegisterFactoryOrDie<GetProfilerSamplingPeriodMS,
-                                 UDTFWithMDFactory<GetProfilerSamplingPeriodMS>>(
-      "GetProfilerSamplingPeriodMS", ctx);
-  registry->RegisterFactoryOrDie<GetLinuxHeadersStatus, UDTFWithMDFactory<GetLinuxHeadersStatus>>(
-      "GetLinuxHeadersStatus", ctx);
-
-  registry->RegisterOrDie<GetDebugMDState>("_DebugMDState");
-  registry->RegisterFactoryOrDie<GetDebugMDWithPrefix, UDTFWithMDFactory<GetDebugMDWithPrefix>>(
-      "_DebugMDGetWithPrefix", ctx);
-  registry->RegisterFactoryOrDie<GetDebugTableInfo, UDTFWithTableStoreFactory<GetDebugTableInfo>>(
-      "_DebugTableInfo", ctx.table_store());
-
-  registry->RegisterFactoryOrDie<GetUDFList, UDTFWithRegistryFactory<GetUDFList>>("GetUDFList",
-                                                                                  registry);
-  registry->RegisterFactoryOrDie<GetUDAList, UDTFWithRegistryFactory<GetUDAList>>("GetUDAList",
-                                                                                  registry);
-  registry->RegisterFactoryOrDie<GetUDTFList, UDTFWithRegistryFactory<GetUDTFList>>("GetUDTFList",
-                                                                                    registry);
-
-  registry->RegisterFactoryOrDie<GetTracepointStatus, UDTFWithMDTPFactory<GetTracepointStatus>>(
-      "GetTracepointStatus", ctx);
   registry
       ->RegisterFactoryOrDie<GetCronScriptHistory, UDTFWithCronscriptFactory<GetCronScriptHistory>>(
           "GetCronScriptHistory", ctx);

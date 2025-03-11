@@ -31,7 +31,7 @@
 OBJ_STRVIEW(profiler_bcc_script, profiler);
 
 DEFINE_string(stirling_profiler_symbolizer, "bcc",
-              "Choice of which symbolizer to use. Options: bcc, elf");
+              "Choice of which symbolizer to use. Options: bcc");
 DEFINE_bool(stirling_profiler_cache_symbols, true, "Whether to cache symbols");
 DEFINE_uint32(stirling_profiler_log_period_minutes, 10,
               "Number of minutes between profiler stats log printouts.");
@@ -155,8 +155,6 @@ Status PerfProfileConnector::InitImpl() {
   // Create a symbolizer for user symbols.
   if (FLAGS_stirling_profiler_symbolizer == "bcc") {
     PX_ASSIGN_OR_RETURN(u_symbolizer_, BCCSymbolizer::Create());
-  } else if (FLAGS_stirling_profiler_symbolizer == "elf") {
-    PX_ASSIGN_OR_RETURN(u_symbolizer_, ElfSymbolizer::Create());
   } else {
     return error::Internal("Unrecognized symbolizer $0", FLAGS_stirling_profiler_symbolizer);
   }
