@@ -49,6 +49,18 @@ cc_library(
         "lib/libLLVMLibDriver.a",
         "lib/libLLVMDlltoolDriver.a",
         "lib/libLLVMCoverage.a",
+        "lib/libLLVMAArch64Disassembler.a",
+        "lib/libLLVMAArch64AsmParser.a",
+        "lib/libLLVMAArch64CodeGen.a",
+        "lib/libLLVMAArch64Desc.a",
+        "lib/libLLVMAArch64Utils.a",
+        "lib/libLLVMAArch64Info.a",
+        "lib/libLLVMX86TargetMCA.a",
+        "lib/libLLVMX86Disassembler.a",
+        "lib/libLLVMX86AsmParser.a",
+        "lib/libLLVMX86CodeGen.a",
+        "lib/libLLVMX86Desc.a",
+        "lib/libLLVMX86Info.a",
         "lib/libLLVMBPFAsmParser.a",
         "lib/libLLVMBPFCodeGen.a",
         "lib/libLLVMBPFDesc.a",
@@ -95,9 +107,9 @@ cc_library(
         "lib/libLLVMTransformUtils.a",
         "lib/libLLVMBitWriter.a",
         "lib/libLLVMAnalysis.a",
+        "lib/libLLVMProfileData.a",
         "lib/libLLVMSymbolize.a",
         "lib/libLLVMDebugInfoDWARF.a",
-        "lib/libLLVMProfileData.a",
         "lib/libLLVMObject.a",
         "lib/libLLVMTextAPI.a",
         "lib/libLLVMMCParser.a",
@@ -117,24 +129,7 @@ cc_library(
         # this stub will need to be removed.
         # Refer to: https://reviews.llvm.org/D55415
         "@px//third_party:clang_tidy_stub",
-    ]
-    + select({
-        "@platforms//cpu:aarch64": [
-            "lib/libLLVMAArch64Disassembler.a",
-            "lib/libLLVMAArch64AsmParser.a",
-            "lib/libLLVMAArch64CodeGen.a", # Maybe can be removed
-            "lib/libLLVMAArch64Desc.a",
-            "lib/libLLVMAArch64Utils.a",
-            "lib/libLLVMAArch64Info.a",
-        ],
-        "@platforms//cpu:x86_64": [
-            "lib/libLLVMX86Disassembler.a",
-            "lib/libLLVMX86AsmParser.a",
-            "lib/libLLVMX86CodeGen.a", # Maybe can be removed
-            "lib/libLLVMX86Desc.a",
-            "lib/libLLVMX86Info.a",
-        ],
-    }),
+    ],
     hdrs = glob([
         "include/**/*.h",
         "include/**/*.def",
