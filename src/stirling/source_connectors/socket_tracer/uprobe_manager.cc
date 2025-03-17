@@ -62,6 +62,7 @@ namespace stirling {
 
 using ::px::stirling::obj_tools::DwarfReader;
 using ::px::stirling::obj_tools::ElfReader;
+using ::px::stirling::obj_tools::BuildInfo;
 using ::px::system::GetKernelVersion;
 using ::px::system::KernelVersion;
 using ::px::system::KernelVersionOrder;
@@ -175,9 +176,11 @@ Status UProbeManager::UpdateOpenSSLSymAddrs(obj_tools::RawFptrManager* fptr_mana
 }
 
 Status UProbeManager::UpdateGoCommonSymAddrs(ElfReader* elf_reader, DwarfReader* dwarf_reader,
-                                             const std::vector<int32_t>& pids) {
+                                             const std::vector<int32_t>& pids,
+                                             const std::string& go_version,
+                                             const BuildInfo& build_info) {
   PX_ASSIGN_OR_RETURN(struct go_common_symaddrs_t symaddrs,
-                      GoCommonSymAddrs(elf_reader, dwarf_reader));
+                      GoCommonSymAddrs(elf_reader, dwarf_reader, go_version, build_info));
 
   for (auto& pid : pids) {
     PX_RETURN_IF_ERROR(go_common_symaddrs_map_->SetValue(pid, symaddrs));
@@ -187,9 +190,11 @@ Status UProbeManager::UpdateGoCommonSymAddrs(ElfReader* elf_reader, DwarfReader*
 }
 
 Status UProbeManager::UpdateGoHTTP2SymAddrs(ElfReader* elf_reader, DwarfReader* dwarf_reader,
-                                            const std::vector<int32_t>& pids) {
+                                            const std::vector<int32_t>& pids,
+                                            const std::string& go_version,
+                                            const BuildInfo& build_info) {
   PX_ASSIGN_OR_RETURN(struct go_http2_symaddrs_t symaddrs,
-                      GoHTTP2SymAddrs(elf_reader, dwarf_reader));
+                      GoHTTP2SymAddrs(elf_reader, dwarf_reader, go_version, build_info));
 
   for (auto& pid : pids) {
     PX_RETURN_IF_ERROR(go_http2_symaddrs_map_->SetValue(pid, symaddrs));
@@ -199,8 +204,10 @@ Status UProbeManager::UpdateGoHTTP2SymAddrs(ElfReader* elf_reader, DwarfReader* 
 }
 
 Status UProbeManager::UpdateGoTLSSymAddrs(ElfReader* elf_reader, DwarfReader* dwarf_reader,
-                                          const std::vector<int32_t>& pids) {
-  PX_ASSIGN_OR_RETURN(struct go_tls_symaddrs_t symaddrs, GoTLSSymAddrs(elf_reader, dwarf_reader));
+                                          const std::vector<int32_t>& pids,
+                                          const std::string& go_version,
+                                          const BuildInfo& build_info) {
+  PX_ASSIGN_OR_RETURN(struct go_tls_symaddrs_t symaddrs, GoTLSSymAddrs(elf_reader, dwarf_reader, go_version, build_info));
 
   for (auto& pid : pids) {
     PX_RETURN_IF_ERROR(go_tls_symaddrs_map_->SetValue(pid, symaddrs));
@@ -525,9 +532,11 @@ StatusOr<int> UProbeManager::AttachNodeJsOpenSSLUprobes(const uint32_t pid,
 StatusOr<int> UProbeManager::AttachGoTLSUProbes(const std::string& binary,
                                                 obj_tools::ElfReader* elf_reader,
                                                 obj_tools::DwarfReader* dwarf_reader,
-                                                const std::vector<int32_t>& pids) {
+                                                const std::vector<int32_t>& pids,
+                                                const std::string& go_version,
+                                                const BuildInfo& build_info) {
   // Step 1: Update BPF symbols_map on all new PIDs.
-  Status s = UpdateGoTLSSymAddrs(elf_reader, dwarf_reader, pids);
+  Status s = UpdateGoTLSSymAddrs(elf_reader, dwarf_reader, pids, go_version, build_info);
   if (!s.ok()) {
     // Doesn't appear to be a binary with the mandatory symbols.
     // Might not even be a golang binary.
@@ -547,9 +556,11 @@ StatusOr<int> UProbeManager::AttachGoTLSUProbes(const std::string& binary,
 StatusOr<int> UProbeManager::AttachGoHTTP2UProbes(const std::string& binary,
                                                   obj_tools::ElfReader* elf_reader,
                                                   obj_tools::DwarfReader* dwarf_reader,
-                                                  const std::vector<int32_t>& pids) {
+                                                  const std::vector<int32_t>& pids,
+                                                  const std::string& go_version,
+                                                  const BuildInfo& build_info) {
   // Step 1: Update BPF symaddrs for this binary.
-  Status s = UpdateGoHTTP2SymAddrs(elf_reader, dwarf_reader, pids);
+  Status s = UpdateGoHTTP2SymAddrs(elf_reader, dwarf_reader, pids, go_version, build_info);
   if (!s.ok()) {
     return 0;
   }
@@ -877,17 +888,20 @@ int UProbeManager::DeployGoUProbes(const absl::flat_hash_set<md::UPID>& pids) {
       continue;
     }
 
-    StatusOr<std::unique_ptr<DwarfReader>> dwarf_reader_status =
-        DwarfReader::CreateIndexingAll(binary);
-    if (!dwarf_reader_status.ok()) {
+    auto build_info_status = ReadGoBuildVersion(elf_reader.get());
+
+    if (!build_info_status.ok()) {
       VLOG(1) << absl::Substitute(
           "Failed to get binary $0 debug symbols. Cannot deploy uprobes. "
           "Message = $1",
-          binary, dwarf_reader_status.msg());
+          binary, build_info_status.msg());
       continue;
     }
-    std::unique_ptr<DwarfReader> dwarf_reader = dwarf_reader_status.ConsumeValueOrDie();
-    Status s = UpdateGoCommonSymAddrs(elf_reader.get(), dwarf_reader.get(), pid_vec);
+
+    auto [go_version, build_info] = build_info_status.ConsumeValueOrDie();
+
+    auto null_dwarf_reader = nullptr;
+    Status s = UpdateGoCommonSymAddrs(elf_reader.get(), null_dwarf_reader, pid_vec, go_version, build_info);
     if (!s.ok()) {
       VLOG(1) << absl::Substitute(
           "Golang binary $0 does not have the mandatory symbols (e.g. TCPConn).", binary);
@@ -898,7 +912,7 @@ int UProbeManager::DeployGoUProbes(const absl::flat_hash_set<md::UPID>& pids) {
     if (!cfg_disable_go_tls_tracing_) {
       VLOG(1) << absl::Substitute("Attempting to attach Go TLS uprobes to binary $0", binary);
       StatusOr<int> attach_status =
-          AttachGoTLSUProbes(binary, elf_reader.get(), dwarf_reader.get(), pid_vec);
+          AttachGoTLSUProbes(binary, elf_reader.get(), null_dwarf_reader, pid_vec, go_version, build_info);
       if (!attach_status.ok()) {
         monitor_.AppendSourceStatusRecord("socket_tracer", attach_status.status(),
                                           "AttachGoTLSUProbes");
@@ -912,7 +926,7 @@ int UProbeManager::DeployGoUProbes(const absl::flat_hash_set<md::UPID>& pids) {
     // Go HTTP2 Probes.
     if (!cfg_disable_go_tls_tracing_ && cfg_enable_http2_tracing_) {
       StatusOr<int> attach_status =
-          AttachGoHTTP2UProbes(binary, elf_reader.get(), dwarf_reader.get(), pid_vec);
+          AttachGoHTTP2UProbes(binary, elf_reader.get(), null_dwarf_reader, pid_vec, go_version, build_info);
       if (!attach_status.ok()) {
         monitor_.AppendSourceStatusRecord("socket_tracer", attach_status.status(),
                                           "AttachGoHTTP2UProbes");

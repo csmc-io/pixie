@@ -71,6 +71,10 @@ pl_cc_test(
     srcs = ["uprobe_symaddrs_test.cc"],
     data = [
         "//src/stirling/testing/demo_apps/go_grpc_tls_pl/server:golang_1_19_grpc_tls_server_binary",
+        "//src/stirling/testing/demo_apps/go_grpc_tls_pl/server:golang_1_20_grpc_tls_server_binary",
+        "//src/stirling/testing/demo_apps/go_grpc_tls_pl/server:golang_1_21_grpc_tls_server_binary",
+        "//src/stirling/testing/demo_apps/go_grpc_tls_pl/server:golang_1_22_grpc_tls_server_binary",
+        "//src/stirling/testing/demo_apps/go_grpc_tls_pl/server:golang_1_23_grpc_tls_server_binary",
         "//src/stirling/testing/demo_apps/node:node_debug",
     ],
     deps = [

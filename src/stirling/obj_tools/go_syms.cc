@@ -70,10 +70,56 @@ StatusOr<std::string> ReadGoString(ElfReader* elf_reader, uint64_t ptr_size, uin
   return std::string(go_version_bytecode);
 }
 
+StatusOr<BuildInfo> ReadBuildInfo(const std::string& mod) {
+  BuildInfo build_info;
+  Module* last_module = nullptr;
+
+  std::istringstream mod_stream{mod};
+  std::string line;
+  while (std::getline(mod_stream, line)) {
+    if (absl::StartsWith(line, "path\t")) {
+      build_info.path = line.substr(5);
+    } else if (absl::StartsWith(line, "mod\t")) {
+      std::istringstream iss(line.substr(4));
+      Module mod_entry;
+      std::getline(iss, mod_entry.path, '\t');
+      std::getline(iss, mod_entry.version, '\t');
+      std::getline(iss, mod_entry.sum, '\t');
+      build_info.main = std::move(mod_entry);
+      last_module = &build_info.main;
+    } else if (absl::StartsWith(line, "dep\t")) {
+      std::istringstream iss(line.substr(4));
+      Module dep;
+      std::getline(iss, dep.path, '\t');
+      std::getline(iss, dep.version, '\t');
+      std::getline(iss, dep.sum, '\t');
+      build_info.deps.push_back(std::move(dep));
+      last_module = &build_info.deps.back();
+    } else if (absl::StartsWith(line, "=>\t")) {
+      if (last_module == nullptr) {
+        return error::InvalidArgument("Unexpected module replacement line with no preceding module.");
+      }
+      std::istringstream iss(line.substr(3));
+      std::unique_ptr<Module> replacement = std::make_unique<Module>();
+      std::getline(iss, replacement->path, '\t');
+      std::getline(iss, replacement->version, '\t');
+      std::getline(iss, replacement->sum, '\t');
+      last_module->replace = std::move(replacement);
+    } else if (absl::StartsWith(line, "build\t")) {
+      std::istringstream iss(line.substr(6));
+      std::string key, value;
+      std::getline(iss, key, '=');
+      std::getline(iss, value);
+      build_info.settings.emplace_back(key, value);
+    }
+  }
+  return build_info;
+}
+
 // Reads the buildinfo header embedded in the .go.buildinfo ELF section in order to determine the go
 // toolchain version. This function emulates what the go version cli performs as seen
 // https://github.com/golang/go/blob/cb7a091d729eab75ccfdaeba5a0605f05addf422/src/debug/buildinfo/buildinfo.go#L151-L221
-StatusOr<std::string> ReadGoBuildVersion(ElfReader* elf_reader) {
+StatusOr<std::pair<std::string, BuildInfo>> ReadGoBuildVersion(ElfReader* elf_reader) {
   PX_ASSIGN_OR_RETURN(ELFIO::section * section, elf_reader->SectionWithName(kGoBuildInfoSection));
   int offset = section->get_offset();
   PX_ASSIGN_OR_RETURN(std::string_view buildInfoByteCode,
@@ -85,6 +131,7 @@ StatusOr<std::string> ReadGoBuildVersion(ElfReader* elf_reader) {
   PX_ASSIGN_OR_RETURN(uint8_t ptr_size, binary_decoder.ExtractBEInt<uint8_t>());
   PX_ASSIGN_OR_RETURN(uint8_t endianness, binary_decoder.ExtractBEInt<uint8_t>());
 
+  BuildInfo build_info;
   // If the endianness has its second bit set, then the go version immediately follows the 32 bit
   // header specified by the varint encoded string data
   if ((endianness & 0x2) != 0) {
@@ -93,7 +140,15 @@ StatusOr<std::string> ReadGoBuildVersion(ElfReader* elf_reader) {
 
     PX_ASSIGN_OR_RETURN(uint64_t size, binary_decoder.ExtractUVarInt());
     PX_ASSIGN_OR_RETURN(std::string_view go_version, binary_decoder.ExtractString(size));
-    return std::string(go_version);
+
+    PX_ASSIGN_OR_RETURN(uint64_t mod_size, binary_decoder.ExtractUVarInt());
+    PX_ASSIGN_OR_RETURN(std::string_view mod, binary_decoder.ExtractString(mod_size));
+    if (mod_size >= 33 && mod.at(mod_size - 17) == '\n') {
+      mod.remove_prefix(16);
+      PX_ASSIGN_OR_RETURN(build_info, ReadBuildInfo(std::string(mod)));
+    }
+
+    return std::make_pair(std::string(go_version), std::move(build_info));
   }
 
   read_ptr_func_t read_ptr;
@@ -142,9 +197,16 @@ StatusOr<std::string> ReadGoBuildVersion(ElfReader* elf_reader) {
                       elf_reader->VirtualAddrToBinaryAddr(read_ptr(runtime_version_vaddr)));
 
   PX_ASSIGN_OR_RETURN(auto version, ReadGoString(elf_reader, ptr_size, ptr_addr, read_ptr));
-  PX_ASSIGN_OR_RETURN(auto mod, ReadGoString(elf_reader, ptr_size, ptr_addr + ptr_size, read_ptr));
-  LOG(INFO) << mod;
-  return version;
+
+  PX_ASSIGN_OR_RETURN(uint64_t mod_ptr_addr,
+                      elf_reader->VirtualAddrToBinaryAddr(read_ptr(runtime_version_vaddr) + ptr_size));
+  auto mod_status = ReadGoString(elf_reader, ptr_size, mod_ptr_addr, read_ptr);
+  if (mod_status.ok()) {
+    std::string mod = mod_status.ValueOrDie();
+  } else {
+    LOG(WARNING) << "Failed to read mod status";
+  }
+  return std::make_pair(version, std::move(build_info));
 }
 
 // Prefixes used to search for itable symbols in the binary. Follows the format:

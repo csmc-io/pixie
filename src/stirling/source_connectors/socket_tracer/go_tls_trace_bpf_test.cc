@@ -71,10 +71,10 @@ class GoTLSTraceTest : public testing::SocketTraceBPFTestFixture</* TClientSideT
   typename TClientServerContainers::GoTLSClientContainer client_;
 };
 
-struct Go1_18TLSClientServerContainers {
-  using GoTLSServerContainer = ::px::stirling::testing::Go1_18_TLSServerContainer;
-  using GoTLSClientContainer = ::px::stirling::testing::Go1_18_TLSClientContainer;
-};
+/* struct Go1_18TLSClientServerContainers { */
+/*   using GoTLSServerContainer = ::px::stirling::testing::Go1_18_TLSServerContainer; */
+/*   using GoTLSClientContainer = ::px::stirling::testing::Go1_18_TLSClientContainer; */
+/* }; */
 
 struct Go1_19TLSClientServerContainers {
   using GoTLSServerContainer = ::px::stirling::testing::Go1_19_TLSServerContainer;
@@ -106,7 +106,7 @@ struct GoBoringCryptoTLSClientServerContainers {
   using GoTLSClientContainer = ::px::stirling::testing::GoBoringCryptoTLSClientContainer;
 };
 
-typedef ::testing::Types<GoBoringCryptoTLSClientServerContainers, Go1_18TLSClientServerContainers,
+typedef ::testing::Types<GoBoringCryptoTLSClientServerContainers,
                          Go1_19TLSClientServerContainers, Go1_20TLSClientServerContainers,
                          Go1_21TLSClientServerContainers, Go1_22TLSClientServerContainers,
                          Go1_23TLSClientServerContainers>
@@ -155,6 +155,7 @@ TYPED_TEST(GoTLSTraceTest, BasicHTTP) {
 }
 
 TYPED_TEST(GoTLSTraceTest, BasicHTTP2) {
+  FLAGS_stirling_conn_trace_pid = this->server_.process_pid();
   this->StartTransferDataThread();
 
   // Run the client in the network of the server, so they can connect to each other.

@@ -23,6 +23,7 @@
 #include "src/common/base/base.h"
 #include "src/stirling/obj_tools/dwarf_reader.h"
 #include "src/stirling/obj_tools/elf_reader.h"
+#include "src/stirling/obj_tools/go_syms.h"
 #include "src/stirling/obj_tools/raw_fptr_manager.h"
 #include "src/stirling/source_connectors/socket_tracer/bcc_bpf_intf/common.h"
 #include "src/stirling/source_connectors/socket_tracer/bcc_bpf_intf/symaddrs.h"
@@ -41,21 +42,27 @@ constexpr std::string_view kLibNettyTcnativePrefix = "libnetty_tcnative_linux_x8
  * uprobe deployment.
  */
 StatusOr<struct go_common_symaddrs_t> GoCommonSymAddrs(obj_tools::ElfReader* elf_reader,
-                                                       obj_tools::DwarfReader* dwarf_reader);
+                                                       obj_tools::DwarfReader* dwarf_reader,
+                                                       const std::string& go_version,
+                                                       const obj_tools::BuildInfo& build_info);
 
 /**
  * Uses ELF and DWARF information to return the locations of all relevant symbols for Go HTTP2
  * uprobe deployment.
  */
 StatusOr<struct go_http2_symaddrs_t> GoHTTP2SymAddrs(obj_tools::ElfReader* elf_reader,
-                                                     obj_tools::DwarfReader* dwarf_reader);
+                                                     obj_tools::DwarfReader* dwarf_reader,
+                                                     const std::string& go_version,
+                                                     const obj_tools::BuildInfo& build_info);
 
 /**
  * Uses ELF and DWARF information to return the locations of all relevant symbols for Go TLS
  * uprobe deployment.
  */
 StatusOr<struct go_tls_symaddrs_t> GoTLSSymAddrs(obj_tools::ElfReader* elf_reader,
-                                                 obj_tools::DwarfReader* dwarf_reader);
+                                                 obj_tools::DwarfReader* dwarf_reader,
+                                                 const std::string& go_version,
+                                                 const obj_tools::BuildInfo& build_info);
 
 /**
  * Detects the version of OpenSSL to return the locations of all relevant symbols for OpenSSL uprobe
