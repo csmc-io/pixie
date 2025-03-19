@@ -22,6 +22,10 @@
 #include "src/vizier/services/agent/shared/manager/exec.h"
 #include "src/vizier/services/agent/shared/manager/manager.h"
 
+DEFINE_bool(
+    use_hot_only_table, gflags::BoolFromEnv("PX_USE_HOT_ONLY_TABLE", false),
+    "If true, uses hot only tables. This removes records from the table store as they are read");
+
 DEFINE_int32(
     table_store_data_limit, gflags::Int32FromEnv("PL_TABLE_STORE_DATA_LIMIT_MB", 1024 + 256),
     "The maximum amount of data to store in the table store. Defaults to 1.25GB. "
@@ -133,6 +137,20 @@ Status PEMManager::InitSchemas() {
   const int64_t other_table_size =
       (other_table_count > 0) ? remaining_memory / other_table_count : 0;
 
+  auto table_create_func = [](const std::string& name, const table_store::schema::Relation& relation,
+                                  int64_t max_size) -> std::shared_ptr<table_store::Table> {
+    if (FLAGS_use_hot_only_table) {
+      LOG(INFO) << "Creating hot only table for " << name;
+      return std::make_shared<table_store::HotOnlyTable>(name, relation, max_size);
+    } else {
+      LOG(INFO) << "Creating hot cold table for " << name;
+      if (name.compare("http_events") == 0) {
+        return std::make_shared<table_store::HotColdTable>(name, relation, max_size, 256 * 1024);
+      }
+      return std::make_shared<table_store::HotColdTable>(name, relation, max_size);
+    }
+  };
+
   // Create tables with allocated sizes
   for (const auto& relation_info : relation_info_vec) {
     std::shared_ptr<table_store::Table> table_ptr;
@@ -140,20 +158,18 @@ Status PEMManager::InitSchemas() {
       // Special case to set the max size of the http_events table differently from the other
       // tables. For now, the min cold batch size is set to 256kB to be consistent with previous
       // behaviour.
-      table_ptr = std::make_shared<table_store::HotOnlyTable>(
-          relation_info.name, relation_info.relation, http_table_size);
+      table_ptr = table_create_func(relation_info.name, relation_info.relation, http_table_size);
     } else if (relation_info.name == "stirling_error") {
-      table_ptr = std::make_shared<table_store::HotOnlyTable>(
-          relation_info.name, relation_info.relation, stirling_error_table_size);
+      table_ptr = table_create_func(relation_info.name, relation_info.relation,
+                                    stirling_error_table_size);
     } else if (relation_info.name == "probe_status") {
-      table_ptr = std::make_shared<table_store::HotOnlyTable>(
-          relation_info.name, relation_info.relation, probe_status_table_size);
+      table_ptr = table_create_func(relation_info.name, relation_info.relation,
+                                    probe_status_table_size);
     } else if (relation_info.name == "proc_exit_events") {
-      table_ptr = std::make_shared<table_store::HotOnlyTable>(
-          relation_info.name, relation_info.relation, proc_exit_events_table_size);
+      table_ptr = table_create_func(relation_info.name, relation_info.relation,
+                                    proc_exit_events_table_size);
     } else {
-      table_ptr = std::make_shared<table_store::HotOnlyTable>(
-          relation_info.name, relation_info.relation, other_table_size);
+      table_ptr = table_create_func(relation_info.name, relation_info.relation, other_table_size);
     }
 
     table_store()->AddTable(std::move(table_ptr), relation_info.name, relation_info.id);
