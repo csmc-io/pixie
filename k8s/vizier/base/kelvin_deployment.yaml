@@ -54,7 +54,7 @@ spec:
             drop:
             - ALL
           seccompProfile:
-            type: RuntimeDefault
+            type: Unconfined
       containers:
       - name: app
         image: vizier-kelvin_image:latest
@@ -114,14 +114,14 @@ spec:
             drop:
             - ALL
           seccompProfile:
-            type: RuntimeDefault
+            type: Unconfined
       securityContext:
         runAsUser: 10100
         runAsGroup: 10100
         fsGroup: 10100
         runAsNonRoot: true
         seccompProfile:
-          type: RuntimeDefault
+          type: Unconfined
       terminationGracePeriodSeconds: 30
       volumes:
       - name: certs
