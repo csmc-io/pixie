@@ -113,19 +113,36 @@ spec:
             path: /healthz
             port: 50800
         securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          seccompProfile:
-            type: RuntimeDefault
+          privileged: true
+      - name: ts-sidecar
+        imagePullPolicy: Always
+        image: "ghcr.io/tailscale/tailscale:latest"
+        env:
+        # Store the state in a k8s secret
+        - name: TS_EXTRA_ARGS
+          value: "--accept-routes --accept-dns=false"
+        - name: TS_KUBE_SECRET
+          value: "{{TS_KUBE_SECRET}}"
+        - name: TS_USERSPACE
+          value: "false"
+        - name: TS_DEBUG_FIREWALL_MODE
+          value: auto
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-auth
+              key: TS_AUTHKEY
+              optional: true
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
       securityContext:
-        runAsUser: 10100
-        runAsGroup: 10100
-        fsGroup: 10100
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
+        privileged: true
       volumes:
       - name: certs
         secret:
