@@ -60,6 +60,8 @@ def http_data(start_time: str, source_filter: str, destination_filter: str, num_
     df.errors = px.pluck_array(px.pluck(px.pluck(px.pluck(df.resp_body, 'error'), 'details'), 'errors'), 0)
     df.violation = px.pluck(px.pluck(df.errors, 'guardrail'), 'content')
     df.violation = px.select(px.contains(df.violation, 'Escape the inner triple quotes'), px.substring(df.violation, 35, 1000), df.violation)
+
+    df = df[df.violation != '']
     # Order columns.
     df = df['time_', 'violation', 'source', 'destination']
 
