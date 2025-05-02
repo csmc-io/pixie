@@ -147,34 +147,6 @@ def service_let_summary(start_time: str):
     return df[['service', 'http_latency_in', 'http_req_throughput_in', 'http_error_rate_in',
                'inbound_conns', 'outbound_conns']]
 
-def _http_events(start_time, end_time, include_health_checks, include_ready_checks, include_unresolved_inbound):
-    ''' Returns a dataframe of http events with health/ready requests filtered out and a
-        failure field added.
-
-    Note this script is prefixed with an underscore and therefore at risk of changing in the future.
-    Rely on this function at your own risk.
-
-    Args:
-    @start_time: The timestamp of data to start at.
-
-    '''
-    df = px.DataFrame(table='http_events', start_time=start_time, end_time=end_time)
-    df.failure = df.resp_status >= 400
-
-    df.is_healthcheck = px.contains(df.req_headers, "kube-probe") or df.req_path == '/healthz'
-    filter_out_conds = (
-        (not df.is_healthcheck or include_health_checks) and (
-        df.req_path != '/readyz' or include_ready_checks)) and (
-        df['remote_addr'] != '-' or include_unresolved_inbound)
-    df = df[filter_out_conds]
-
-    df.req_pii = px.redact_pii_best_effort(df.req_body)
-    df.resp_pii = px.redact_pii_best_effort(df.resp_body)
-    df.has_pii = px.contains(df.req_pii, "REDACTED") or px.contains(df.resp_pii, "REDACTED")
-    df.pii_score = px.select(df.has_pii and not px.contains(df.req_headers, 'log.tailscale.com'), 0.5, 0.0)
-
-    return df
-
 
 def service_let_graph(start_time: str):
     ''' Compute a summary of traffic by requesting service, for requests on services
@@ -182,7 +154,7 @@ def service_let_graph(start_time: str):
     Args:
     @start_time: The timestamp of data to start at.
     '''
-    df = http_pii_graph(start_time, px.now())
+    df = pxviews.http_pii_graph(start_time, px.now())
     df.window = px.DurationNanos(px.now() - px.parse_time(start_time))
     # Compute statistics about each edge of the service graph.
     df.request_throughput = df.num_requests / df.window
