@@ -58,8 +58,7 @@ class LogPatternsConnector : public SourceConnector {
 
  protected:
   explicit LogPatternsConnector(std::string_view source_name)
-      : SourceConnector(source_name, kTables) {
-  }
+      : SourceConnector(source_name, kTables) {}
 
  private:
   void TransferLogPatternsTable(ConnectorContext* ctx, DataTable* data_table);

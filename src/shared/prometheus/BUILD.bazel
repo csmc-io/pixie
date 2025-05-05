@@ -29,7 +29,7 @@ pl_cc_library(
     hdrs = glob(["*.h"]),
     deps = [
         "@com_github_libcpr_cpr//:cpr",
-    ]
+    ],
 )
 
 pl_cc_test(

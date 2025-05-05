@@ -31,7 +31,7 @@ struct Metric {
 };
 
 inline std::string ToString(const Metric& metric) {
-  std::string str = absl::StrCat(metric.name, " ",  metric.val);
+  std::string str = absl::StrCat(metric.name, " ", metric.val);
   for (const auto& [key, val] : metric.labels) {
     absl::StrAppend(&str, " ", key, "=", val);
   }
@@ -39,11 +39,11 @@ inline std::string ToString(const Metric& metric) {
 }
 
 inline std::string ToString(const std::vector<Metric> metrics) {
-    std::string str;
-    for (const auto& metric : metrics) {
-        absl::StrAppend(&str, ToString(metric), "\n");
-    }
-    return str;
+  std::string str;
+  for (const auto& metric : metrics) {
+    absl::StrAppend(&str, ToString(metric), "\n");
+  }
+  return str;
 }
 
 // print metric to a string

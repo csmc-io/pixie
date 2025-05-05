@@ -21,17 +21,23 @@ container_log_messages_total{container_id="/k8s/kube-system/kube-dns-bd76ffc78-6
   std::vector<Metric> metrics = DecodeMetric(prom_text, metric_name);
   for (auto& metric : metrics) {
     EXPECT_EQ(metric.name, metric_name);
-    if (metric.labels["container_id"] == "/k8s/default/otel-collector-cf5f55bcb-56wg8/otel-collector") {
+    if (metric.labels["container_id"] ==
+        "/k8s/default/otel-collector-cf5f55bcb-56wg8/otel-collector") {
       EXPECT_EQ(metric.val, 1525271);
     } else if (metric.labels["container_id"] == "/k8s/gmp-system/collector-6k786/prometheus") {
       EXPECT_EQ(metric.val, 3);
-    } else if (metric.labels["container_id"] == "/k8s/kube-system/konnectivity-agent-88b55d7d8-v29ht/konnectivity-agent") {
+    } else if (metric.labels["container_id"] ==
+               "/k8s/kube-system/konnectivity-agent-88b55d7d8-v29ht/konnectivity-agent") {
       EXPECT_EQ(metric.val, 63);
-    } else if (metric.labels["container_id"] == "/k8s/kube-system/konnectivity-agent-88b55d7d8-v29ht/konnectivity-agent-metrics-collector") {
+    } else if (metric.labels["container_id"] ==
+               "/k8s/kube-system/konnectivity-agent-88b55d7d8-v29ht/"
+               "konnectivity-agent-metrics-collector") {
       EXPECT_EQ(metric.val, 18);
-    } else if (metric.labels["container_id"] == "/k8s/kube-system/kube-dns-bd76ffc78-68wdb/kubedns-metrics-collector") {
+    } else if (metric.labels["container_id"] ==
+               "/k8s/kube-system/kube-dns-bd76ffc78-68wdb/kubedns-metrics-collector") {
       EXPECT_EQ(metric.val, 18);
-    } else if (metric.labels["container_id"] == "/k8s/kube-system/kube-dns-bd76ffc78-68wdb/kubedns-metrics-collector") {
+    } else if (metric.labels["container_id"] ==
+               "/k8s/kube-system/kube-dns-bd76ffc78-68wdb/kubedns-metrics-collector") {
       EXPECT_EQ(metric.val, 2600);
     }
   }
@@ -39,6 +45,6 @@ container_log_messages_total{container_id="/k8s/kube-system/kube-dns-bd76ffc78-6
   LOG(INFO) << absl::StrCat("Metrics: ", ToString(metrics));
 }
 
-} // namespace prometheus
-} // namespace shared
-} // namespace px
+}  // namespace prometheus
+}  // namespace shared
+}  // namespace px

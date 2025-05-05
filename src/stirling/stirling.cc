@@ -47,6 +47,7 @@
 #include "src/stirling/source_connectors/dynamic_bpftrace/utils.h"
 #include "src/stirling/source_connectors/dynamic_tracer/dynamic_trace_connector.h"
 #include "src/stirling/source_connectors/jvm_stats/jvm_stats_connector.h"
+#include "src/stirling/source_connectors/log_patterns/log_patterns_connector.h"
 #include "src/stirling/source_connectors/network_stats/network_stats_connector.h"
 #include "src/stirling/source_connectors/perf_profiler/perf_profile_connector.h"
 #include "src/stirling/source_connectors/pid_runtime/pid_runtime_connector.h"
@@ -57,15 +58,15 @@
 #include "src/stirling/source_connectors/seq_gen/seq_gen_connector.h"
 #include "src/stirling/source_connectors/socket_tracer/socket_trace_connector.h"
 #include "src/stirling/source_connectors/stirling_error/stirling_error_connector.h"
-#include "src/stirling/source_connectors/log_patterns/log_patterns_connector.h"
 
 #include "src/stirling/source_connectors/dynamic_tracer/dynamic_tracing/dynamic_tracer.h"
 #include "src/stirling/source_connectors/tcp_stats/tcp_stats_connector.h"
 
-DEFINE_string(stirling_sources, gflags::StringFromEnv("PL_STIRLING_SOURCES", "kProd"),
-              "Choose sources to enable. [kAll|kProd|kMetrics|kTracers|kProfiler|kTCPStats|kLogPatterns] or "
-              "comma separated list of "
-              "sources (find them the header files of source connector classes).");
+DEFINE_string(
+    stirling_sources, gflags::StringFromEnv("PL_STIRLING_SOURCES", "kProd"),
+    "Choose sources to enable. [kAll|kProd|kMetrics|kTracers|kProfiler|kTCPStats|kLogPatterns] or "
+    "comma separated list of "
+    "sources (find them the header files of source connector classes).");
 
 namespace px {
 namespace stirling {
