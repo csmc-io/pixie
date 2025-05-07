@@ -1,0 +1,4 @@
+---
+short: LLM model serving stats
+long: >
+  Shows LLM model serving stats like TTFT, ITL, token throughput, etc.

@@ -1,0 +1,290 @@
+{
+    "variables": [
+        {
+            "name": "svc",
+            "type": "PX_SERVICE",
+            "description": "The full/partial name of the service to get stats for. Format: ns/svc_name",
+            "defaultValue": ""
+        },
+        {
+            "name": "start_time",
+            "type": "PX_STRING",
+            "description": "The relative start time of the window. Current time is assumed to be now",
+            "defaultValue": "-5m"
+        },
+        {
+            "name": "exclude_in_cluster",
+            "type": "PX_BOOLEAN",
+            "description": "Whether in-cluster LLM APIs should be excluded from the response",
+            "defaultValue": false
+        },
+        {
+            "name": "exclude_external",
+            "type": "PX_BOOLEAN",
+            "description": "Whether external LLM APIs should be excluded from the response",
+            "defaultValue": false
+        }
+    ],
+    "globalFuncs": [
+        {
+            "outputName": "LET",
+            "func": {
+                "name": "svc_let",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    },
+                    {
+                        "name": "svc",
+                        "variable": "svc"
+                    },
+                    {
+                        "name": "exclude_in_cluster",
+                        "variable": "exclude_in_cluster"
+                    },
+                    {
+                        "name": "exclude_external",
+                        "variable": "exclude_external"
+                    }
+                ]
+            }
+        }
+    ],
+    "widgets": [
+        {
+            "name": "Time to first token p50 Latency",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "ttft_latency_p50",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P50 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Time to first token p90 Latency",
+            "position": {
+                "x": 4,
+                "y": 0,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "ttft_latency_p90",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P90 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Request Throughput",
+            "position": {
+                "x": 8,
+                "y": 0,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "request_throughput",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "Request throughput"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "P50 Latency",
+            "position": {
+                "x": 0,
+                "y": 1,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "latency_p50",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P50 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "p90 Latency",
+            "position": {
+                "x": 4,
+                "y": 1,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "latency_p90",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P90 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "p99 Latency",
+            "position": {
+                "x": 8,
+                "y": 1,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "latency_p99",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P99 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Inter-token Latency p50",
+            "position": {
+                "x": 0,
+                "y": 2,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "itl_latency_p50",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P50 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Inter-token Latency p90",
+            "position": {
+                "x": 4,
+                "y": 2,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "itl_latency_p90",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "P90 Latency"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Token Throughput",
+            "position": {
+                "x": 8,
+                "y": 2,
+                "w": 4,
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "token_throughput",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "Request throughput"
+                },
+                "xAxis": null
+            }
+        }
+    ]
+}
