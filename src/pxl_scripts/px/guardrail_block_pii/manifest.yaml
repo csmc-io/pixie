@@ -1,0 +1,4 @@
+---
+short: Update Pixie's LLM policy enforcement
+long: >
+  This script updates the guardrail_policy table for use in LLM policy enforcement.

@@ -14,12 +14,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-import px
-import pxviews
-df = px.DataFrame('guardrails_policy')
+import pxllm
 
-max_time = df.agg(max_time=('time_', px.max))
-df = df.merge(max_time, how='inner', left_on='time_', right_on='max_time')
-df = df[['policy']]
-df.policy = pxviews.format_guardrail_policy(df.policy)
-px.display(df, 'policies')
+policy = """raise "Found PII in prompt message" if:
+    (msg: Message)
+    any(pii(msg))
+"""
+
+pxllm.enforce_llm_policy(policy)
