@@ -49,6 +49,30 @@
                     }
                 ]
             }
+        },
+        {
+            "outputName": "GRAPH",
+            "func": {
+                "name": "svc_graph",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    },
+                    {
+                        "name": "svc",
+                        "variable": "svc"
+                    },
+                    {
+                        "name": "exclude_in_cluster",
+                        "variable": "exclude_in_cluster"
+                    },
+                    {
+                        "name": "exclude_external",
+                        "variable": "exclude_external"
+                    }
+                ]
+            }
         }
     ],
     "widgets": [
@@ -284,6 +308,23 @@
                     "label": "Request throughput"
                 },
                 "xAxis": null
+            }
+        },
+        {
+            "name": "Inference Graph",
+            "position": {
+                "x": 0,
+                "y": 3,
+                "w": 12,
+                "h": 3
+            },
+            "globalFuncOutputName": "GRAPH",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.Graph",
+                "adjacencyList": {
+                    "fromColumn": "requestor",
+                    "toColumn": "responder"
+                }
             }
         }
     ]

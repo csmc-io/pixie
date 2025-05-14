@@ -112,7 +112,7 @@ def latency_histogram(start_time: str, svc: px.Service):
     return matching_df.groupby('request_latency').agg(count=('resp_status', px.count))
 
 
-def outgoing_edges(start_time: str, svc: px.Service):
+def outgoing_edges(start_time: str, exclude_in_cluster: bool, exclude_external: bool):
     """ Determines the svcs that this svc makes
     requests to.
 
@@ -124,16 +124,14 @@ def outgoing_edges(start_time: str, svc: px.Service):
     Returns: DataFrame of the svcs this svc talks to
         and the LET summary of that communication.
     """
-    df = let_per_edge(start_time)
-    # Filter for traffic that starts at this svc.
-    outgoing_let_df = df[px.contains(
-        df[src_col], svc)]
-
+    df = let_per_edge(start_time, exclude_in_cluster, exclude_external)
+    # TODO(ddelnano): Later filter for traffic that starts at this svc.
+    outgoing_let_df = df
     # Group outgoing traffic by (src, dest) to get all outgoing edges.
     return summarize_LET(outgoing_let_df, [src_col, dest_col])
 
 
-def incoming_edges(start_time: str, svc: px.Service):
+def incoming_edges(start_time: str, exclude_in_cluster: bool, exclude_external: bool):
     """ Determines the svcs that make requests to this svc.
 
     Args:
@@ -144,17 +142,27 @@ def incoming_edges(start_time: str, svc: px.Service):
     Returns: DataFrame of the svcs that talk to this svc
         and the LET summary of that communication.
     """
-    df = let_per_edge(start_time)
+    df = let_per_edge(start_time, exclude_in_cluster, exclude_external)
 
-    # Filter traffic that ends at this svc.
-    incoming_let_df = df[px.contains(
-        df[dest_col], svc)]
+    # TODO(ddelnano): Add filtering for traffic that ends at this svc.
+    incoming_let_df = df
 
     # Group incoming traffic by (src, dest) to get all incoming edges.
     return summarize_LET(incoming_let_df, [src_col, dest_col])
 
 
-def svc_graph(start_time: str, svc: px.Service):
+def make_gpu_process_stats(start_time: str):
+    gpu = px.DataFrame('gpu_process_stats', start_time=start_time)
+    gpu.device_id = "0"
+    gpu[src_col] = gpu.ctx['service']
+    gpu[dest_col] = 'host: ' + gpu.ctx['node'] + '\ndevice id: ' + gpu.device_id
+    gpu.error_rate = 0.0
+    gpu.bytes_throughput = 1000.0
+    gpu.request_throughput = 1000.0
+    return gpu[[src_col, dest_col, 'error_rate', 'bytes_throughput', 'request_throughput']]
+
+
+def svc_graph(start_time: str, svc: px.Service, exclude_in_cluster: bool, exclude_external: bool):
     """ Determines the svcs that make requests to this svc.
     Like incoming_edges, but filters out empty strings in the src/dest.
 
@@ -167,7 +175,10 @@ def svc_graph(start_time: str, svc: px.Service):
         and the LET summary of that communication.
     """
 
-    df = incoming_edges(start_time, svc)
+    df = incoming_edges(start_time, exclude_in_cluster, exclude_external)
+    outgoing = outgoing_edges(start_time, exclude_in_cluster, exclude_external)
+    gpu = make_gpu_process_stats(start_time).append(outgoing)
+    df = df.append(gpu)
     return df[df[src_col] != '' and df[dest_col] != '']
 
 
@@ -196,7 +207,7 @@ def make_http_table(start_time: str, exclude_in_cluster: bool, exclude_external:
     return df
 
 
-def let_per_edge(start_time: str):
+def let_per_edge(start_time: str, exclude_in_cluster: bool, exclude_external: bool):
     """ Calculates the LET per edge of the svc graph.
 
     Args:
@@ -205,15 +216,19 @@ def let_per_edge(start_time: str):
     Returns: DataFrame of HTTP events with formatted columns.
     """
 
-    df = make_http_table(start_time)
+    df = make_http_table(start_time, exclude_in_cluster, exclude_external)
     # Calculate LET for each svc edge in the svc graph over each time window.
     # Each edge starts at a requester ('remote_addr') and ends at a
     # responder (k8s_object).
+    hostname_tracker = px.DataFrame('hostname_tracker', start_time=start_time).drop(['time_'])
+
     edge_let_df = calc_model_http_LET(df, ['remote_addr', k8s_object, 'timestamp'])
     # Convert 'remote_addr' IP into a svc name.
     edge_let_df = ip_to_svc_name(edge_let_df, 'remote_addr', src_col)
     # Rename k8s_object to dest_col.
     edge_let_df[dest_col] = edge_let_df[k8s_object]
+    edge_let_df = edge_let_df.merge(hostname_tracker, how='left', left_on='remote_addr', right_on='ip_addr')
+    edge_let_df[src_col] = px.select(edge_let_df.hostname != "", edge_let_df.hostname, edge_let_df[src_col])
     return edge_let_df
 
 
@@ -330,7 +345,6 @@ def calc_model_http_LET(df, groups):
     """
     df = df[df.tokens > 1]
     df.itl = (df.latency - df.ttfb) / (df.tokens - 1)
-    px.debug(df)
     # Aggregate values over the window.
     df = df.groupby(groups).agg(
         latency_quantiles=('latency', px.quantiles),
