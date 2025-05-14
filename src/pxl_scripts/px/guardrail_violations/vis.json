@@ -49,20 +49,71 @@
                     }
                 ]
             }
+        },
+        {
+            "outputName": "LET",
+            "func": {
+                "name": "svc_let",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            }
         }
     ],
     "widgets": [
         {
-            "name": "Table",
+            "name": "Request Throughput",
             "position": {
                 "x": 0,
                 "y": 0,
                 "w": 12,
-                "h": 4
+                "h": 3
+            },
+            "globalFuncOutputName": "LET",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "request_throughput",
+                        "series": "k8s",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "Request throughput"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Violations",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 3
             },
             "globalFuncOutputName": "http_data",
             "displaySpec": {
-                "@type": "types.px.dev/px.vispb.Table"
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "throughput_total",
+                        "series": "model",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "Request throughput"
+                },
+                "xAxis": null
             }
         }
     ]
