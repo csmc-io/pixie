@@ -1,0 +1,97 @@
+# Copyright 2018- The Pixie Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+import px
+
+ns_per_ms = 1000 * 1000
+ns_per_s = 1000 * ns_per_ms
+# Window size to use on time_ column for bucketing.
+window_ns = px.DurationNanos(10 * ns_per_s)
+
+def gpu_power(start_time: str):
+    df = px.DataFrame('gpu_stats', start_time=start_time)
+    px.debug(df, 'gpu_stats')
+    df.node = df.ctx['node']
+    # Convert from milli Watts
+    df.gpu_power_limit = df.gpu_power_limit / 1000
+    df = df.groupby(['node', 'gpu_device_id']).agg(
+        watts=('gpu_power_limit', px.any),
+    )
+    return df[[
+        'node',
+        'watts',
+    ]]
+
+def gpu_process_memory(start_time: str):
+    df = px.DataFrame('gpu_process_stats', start_time=start_time)
+    df.process = df.ctx['pod']
+    df = df.groupby('process').agg(
+        memory=('gpu_memory_bytes', px.any),
+    )
+    return df[[
+        'process',
+        'memory',
+    ]]
+
+def gpu_pcie_throughput(start_time: str):
+    df = px.DataFrame('gpu_stats', start_time=start_time)
+    df.timestamp = px.bin(df.time_, window_ns)
+    df.node = df.ctx['node']
+
+    rx_df = df.groupby(['node', 'gpu_device_id', 'timestamp']).agg(
+        throughput=('pcie_rx', px.sum)
+    )
+    rx_df.node_and_dir = rx_df.node + '_rx'
+
+    tx_df = df.groupby(['node', 'gpu_device_id', 'timestamp']).agg(
+        throughput=('pcie_tx', px.sum)
+    )
+    tx_df.node_and_dir = tx_df.node + '_tx'
+    df = rx_df.append(tx_df)
+    df.time_ = df.timestamp
+    return df
+
+
+def gpu_util(start_time: str):
+    df = px.DataFrame('gpu_stats', start_time=start_time)
+    df.timestamp = px.bin(df.time_, window_ns)
+    df.node = df.ctx['node']
+    df = df.groupby(['node', 'gpu_device_id', 'timestamp']).agg(
+        utilization=('gpu_utilization', px.mean),
+        memory_utilization=('gpu_memory_utilization', px.mean),
+    )
+    df.time_ = df.timestamp
+    return df[[
+        'time_',
+        'node',
+        'utilization',
+        'memory_utilization',
+    ]]
+
+def gpu_temp(start_time: str):
+    df = px.DataFrame('gpu_stats', start_time=start_time)
+    df.timestamp = px.bin(df.time_, window_ns)
+    df.node = df.ctx['node']
+    df = df.groupby(['node', 'gpu_device_id', 'timestamp']).agg(
+        temp=('gpu_temperature', px.mean),
+    )
+    df.time_ = df.timestamp
+    return df[[
+        'time_',
+        'node',
+        'temp',
+    ]]
+

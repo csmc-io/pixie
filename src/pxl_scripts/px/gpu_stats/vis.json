@@ -1,0 +1,206 @@
+{
+    "variables": [
+        {
+            "name": "start_time",
+            "type": "PX_STRING",
+            "description": "The relative start time of the window. Current time is assumed to be now",
+            "defaultValue": "-5m"
+        },
+        {
+            "name": "node",
+            "type": "PX_NODE",
+            "description": "The k8s node to filter on. Defaults to no filtering",
+            "defaultValue": ""
+        }
+    ],
+    "widgets": [
+        {
+            "name": "Power Usage by Host",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 3,
+                "h": 2
+            },
+            "func": {
+                "name": "gpu_power",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            },
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.PieChart",
+                "pie": {
+                    "value": "watts",
+                    "label": "node"
+                }
+            }
+        },
+        {
+            "name": "PCIe Transmission",
+            "position": {
+                "x": 3,
+                "y": 0,
+                "w": 9,
+                "h": 2
+            },
+            "globalFuncOutputName": "PCIE_THROUGHPUT",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "throughput",
+                        "series": "node_and_dir",
+                        "stackBySeries": true,
+                        "mode": "MODE_AREA"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "Throughput (bytes)"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "Memory Usage By Pod",
+            "position": {
+                "x": 0,
+                "y": 1,
+                "w": 3,
+                "h": 2
+            },
+            "func": {
+                "name": "gpu_process_memory",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            },
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.PieChart",
+                "pie": {
+                    "value": "memory",
+                    "label": "process"
+                }
+            }
+        },
+        {
+            "name": "GPU Temperature",
+            "position": {
+                "x": 3,
+                "y": 1,
+                "w": 9,
+                "h": 2
+            },
+            "func": {
+                "name": "gpu_temp",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            },
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "temp",
+                        "series": "node",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "Error Rate"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "GPU Utilization",
+            "position": {
+                "x": 0,
+                "y": 2,
+                "w": 6,
+                "h": 2
+            },
+            "globalFuncOutputName": "UTILIZATION",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "utilization",
+                        "series": "node",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "%"
+                },
+                "xAxis": null
+            }
+        },
+        {
+            "name": "GPU Copy Utilization",
+            "position": {
+                "x": 6,
+                "y": 2,
+                "w": 6,
+                "h": 2
+            },
+            "globalFuncOutputName": "UTILIZATION",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "memory_utilization",
+                        "series": "node",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "%"
+                },
+                "xAxis": null
+            }
+        }
+    ],
+    "globalFuncs": [
+        {
+            "outputName": "PCIE_THROUGHPUT",
+            "func": {
+                "name": "gpu_pcie_throughput",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            }
+        },
+        {
+            "outputName": "UTILIZATION",
+            "func": {
+                "name": "gpu_util",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            }
+        }
+    ]
+}

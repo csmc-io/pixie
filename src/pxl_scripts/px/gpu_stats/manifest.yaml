@@ -1,0 +1,4 @@
+---
+short: GPU Stat
+long: >
+  Shows wealth of information on GPUs, including utilization, memory usage, temperature, and more.
