@@ -25,9 +25,9 @@ def gpu_power(start_time: str):
     df = px.DataFrame('gpu_stats', start_time=start_time)
     df.node = df.ctx['node']
     # Convert from milli Watts
-    df.gpu_power_limit = df.gpu_power_limit / 1000
+    df.gpu_power_usage = df.gpu_power_usage / 1000
     df = df.groupby(['node', 'gpu_device_id']).agg(
-        watts=('gpu_power_limit', px.any),
+        watts=('gpu_power_usage', px.any),
     )
 
     return df[[
@@ -98,4 +98,3 @@ def gpu_temp(start_time: str):
         'temp',
         'memory_usage',
     ]]
-
