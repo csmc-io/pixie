@@ -259,7 +259,7 @@ def format_events_table(df, latency_col, exclude_in_cluster, exclude_external):
     df.exclude_in_cluster = exclude_in_cluster
 
     df.model = df.model + ' ' + df[k8s_object]
-    df.tokens = px.atoi(px.replace('.*"(?:completion_tokens|eval_count)":(\d+),.*', df.resp_body, '\\1'), 0)
+    df.tokens = px.atoi(px.replace('.*"(?:completion_tokens|eval_count)":(\d+)(?:,|}).*', df.resp_body, '\\1'), 0)
 
     return df
 
