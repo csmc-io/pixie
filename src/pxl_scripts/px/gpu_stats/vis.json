@@ -42,7 +42,7 @@
         {
             "name": "PCIe Transmission",
             "position": {
-                "x": 3,
+                "x": 6,
                 "y": 0,
                 "w": 9,
                 "h": 2
@@ -66,10 +66,44 @@
             }
         },
         {
+            "name": "GPU Memory Usage by Host",
+            "position": {
+                "x": 3,
+                "y": 1,
+                "w": 12,
+                "h": 2
+            },
+            "func": {
+                "name": "gpu_temp",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            },
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.TimeseriesChart",
+                "timeseries": [
+                    {
+                        "value": "memory_usage",
+                        "series": "node",
+                        "stackBySeries": false,
+                        "mode": "MODE_LINE"
+                    }
+                ],
+                "title": "",
+                "yAxis": {
+                    "label": "%"
+                },
+                "xAxis": null
+            }
+        },
+        {
             "name": "Memory Usage By Pod",
             "position": {
                 "x": 0,
-                "y": 1,
+                "y": 2,
                 "w": 3,
                 "h": 2
             },
@@ -94,7 +128,7 @@
             "name": "GPU Temperature",
             "position": {
                 "x": 3,
-                "y": 1,
+                "y": 2,
                 "w": 9,
                 "h": 2
             },
@@ -128,7 +162,7 @@
             "name": "GPU Utilization",
             "position": {
                 "x": 0,
-                "y": 2,
+                "y": 3,
                 "w": 6,
                 "h": 2
             },
@@ -154,7 +188,7 @@
             "name": "GPU Copy Utilization",
             "position": {
                 "x": 6,
-                "y": 2,
+                "y": 3,
                 "w": 6,
                 "h": 2
             },
