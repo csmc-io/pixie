@@ -69,7 +69,7 @@ export function PixieCookieBanner(): React.ReactElement {
       }}
     >
     This site uses cookies to improve your experience. By using this service, you opt into their usage as
-    outlined in our <a href='https://csmc.ai/docs/terms-and-conditions/cookie-policy'>Cookie Policy</a>.
+    outlined in our <a href='https://docs.csmc.ai/terms-and-conditions/cookie-policy'>Cookie Policy</a>.
     </CookieConsent>
   );
 }
