@@ -84,13 +84,13 @@ data:
                   socket_address:
                     address: api-service
                     port_value: 51200
-          transport_socket:
-            name: envoy.transport_sockets.tls
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
-              common_tls_context:
-                tls_certificates:
-                  - certificate_chain:
-                      filename: "/service-certs/client.crt"
-                    private_key:
-                      filename: "/service-certs/client.key"
+        transport_socket:
+          name: envoy.transport_sockets.tls
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+            common_tls_context:
+              tls_certificates:
+                - certificate_chain:
+                    filename: "/service-certs/client.crt"
+                  private_key:
+                    filename: "/service-certs/client.key"
