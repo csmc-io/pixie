@@ -1,0 +1,4 @@
+---
+short: Lists all of the configured AI policy enforcement
+long: >
+  This view displays a summary of all the configured AI policy enforcement rules.

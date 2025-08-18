@@ -1,0 +1,11 @@
+import px
+
+df = px.GetConfigUpdateStatus()
+df = df[px.contains(df.key, "/policy/")]
+df.policy = px.pluck_array(px.pluck(px.pluck(px.pluck_array(px.pluck(px.pluck_array(px.pluck(px.pluck(df.value, 'spec'), 'ingress'), 0), 'toPorts'), 0), 'rules'), 'mcp'), 0)
+df.rule_name = px.pluck(df.policy, 'name')
+df.policy_type = 'mcp'
+df.deny = px.pluck(df.policy, 'deny') == 'true'
+df.policy = px.pluck(df.policy, 'toolCallChain')
+df = df[['rule_name', 'policy_type', 'deny', 'policy']]
+px.display(df)
