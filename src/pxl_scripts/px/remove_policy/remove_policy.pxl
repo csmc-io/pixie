@@ -8,6 +8,11 @@
 # SPDX-License-Identifier: Proprietary
 
 import px
+import pxmcp
 import pxviews
+import pxllm
 
-px.display(pxviews.mcp_policies())
+policy_name = "deny-chained-call"
+
+pxmcp.delete_agent_config(pxviews.get_mcp_policy_name(policy_name))
+px.display(px.GetConfigUpdateStatus())
