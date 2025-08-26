@@ -1,0 +1,27 @@
+{
+    "variables": [],
+    "globalFuncs": [
+        {
+            "outputName": "suggested_policies",
+            "func": {
+                "name": "suggested_policies",
+                "args": []
+            }
+        }
+    ],
+    "widgets": [
+        {
+            "name": "Policy Suggestions",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 4
+            },
+            "globalFuncOutputName": "suggested_policies",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.Table"
+            }
+        }
+    ]
+}

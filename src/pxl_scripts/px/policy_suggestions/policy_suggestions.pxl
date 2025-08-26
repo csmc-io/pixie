@@ -1,0 +1,36 @@
+# Copyright © 2024- Cosmic Observe, Inc.
+# All Rights Reserved.
+#
+# NOTICE:  All information contained herein is, and remains
+# the property of Cosmic Observe, Inc. and its suppliers,
+# if any.
+#
+# SPDX-License-Identifier: Proprietary
+
+import px
+
+def suggested_policies():
+    df = px.GetConfigUpdateStatus()
+    df = df[px.contains(df.key, "/tools/")]
+
+    df.key_parts = px.split(df.key, "/")
+    df.mcp_server = px.pluck_array(df.key_parts, 2)
+    df.tool_name = px.pluck_array(df.key_parts, 3)
+    df.block_chained_call = False
+
+    df.prompt_injection0 = px.pluck(px.pluck_array(df.value, 0), 'prompt_injection_detected')
+    df.prompt_injection1 = px.pluck(px.pluck_array(df.value, 1), 'prompt_injection_detected')
+    df.prompt_injection2 = px.pluck(px.pluck_array(df.value, 2), 'prompt_injection_detected')
+    df.prompt_injection3 = px.pluck(px.pluck_array(df.value, 3), 'prompt_injection_detected')
+    df.prompt_injection4 = px.pluck(px.pluck_array(df.value, 4), 'prompt_injection_detected')
+    df.prompt_injection5 = px.pluck(px.pluck_array(df.value, 5), 'prompt_injection_detected')
+
+    df.policy_type = 'mcp'
+    df.prompt_injection = ((((df.prompt_injection0 == "true" or df.prompt_injection1 == "true" ) or df.prompt_injection2 == "true" ) or df.prompt_injection3 == "true") or df.prompt_injection4 == "true") or df.prompt_injection5 == "true"
+    df.reason = px.select(df.prompt_injection, 'Block prompt injection', px.select(df.block_chained_call, 'Block chained tool calls', ''))
+    df = df[df.reason != '']
+    df.suggested_policy = px.select(df.prompt_injection, px.script_reference(df.reason, 'px/block_tool_call', {'tool_name': df.tool_name}), px.script_reference(df.reason, ''))
+    df.tool_name = df.mcp_server + " : " + df.tool_name
+    df = df['policy_type', 'tool_name', 'suggested_policy']
+    return df
+
