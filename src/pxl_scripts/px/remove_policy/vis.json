@@ -1,0 +1,39 @@
+{
+    "variables": [
+        {
+            "name": "tool_name",
+            "type": "PX_STRING",
+            "description": "The name of the tool to remove the policy for.",
+            "defaultValue": "chained"
+        }
+    ],
+    "globalFuncs": [
+        {
+            "outputName": "results",
+            "func": {
+                "name": "remove_tool_policy",
+                "args": [
+                    {
+                        "name": "tool_name",
+                        "variable": "tool_name"
+                    }
+                ]
+            }
+        }
+    ],
+    "widgets": [
+        {
+            "name": "Results",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 5
+            },
+            "globalFuncOutputName": "results",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.Table"
+            }
+        }
+    ]
+}

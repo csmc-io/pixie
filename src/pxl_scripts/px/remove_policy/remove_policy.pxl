@@ -12,7 +12,9 @@ import pxmcp
 import pxviews
 import pxllm
 
-policy_name = "deny-chained-call"
+def remove_tool_policy(tool_name: str):
+    policy_name = "deny-" + tool_name + "-call"
 
-pxmcp.delete_agent_config(pxviews.get_mcp_policy_name(policy_name))
-px.display(px.GetConfigUpdateStatus())
+    pxmcp.delete_agent_config(pxviews.get_mcp_policy_name(policy_name))
+    df = pxviews.mcp_policies()
+    return df
