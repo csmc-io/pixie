@@ -15,17 +15,19 @@ This script traces all HTTP/HTTP2 data on the cluster.
 import px
 
 
-def mcp_data(start_time: str, source_filter: str, destination_filter: str, num_head: int):
+def mcp_data(start_time: str, mcp_session_id: str, source_filter: str, destination_filter: str, num_head: int):
 
     df = px.DataFrame(table='http_events', start_time=start_time)
 
     # Add context.
+    df.session_id = px.pluck(df.req_headers, 'mcp-session-id')
     df.node = df.ctx['node']
     df.pid = px.upid_to_pid(df.upid)
     df = add_source_dest_columns(df)
     df = add_source_dest_links(df, start_time)
 
     # Filter out entities as specified by the user.
+    df = df[px.contains(df.session_id, mcp_session_id)]
     df = df[px.contains(df.source, source_filter)]
     df = df[px.contains(df.destination, destination_filter)]
 
@@ -39,7 +41,7 @@ def mcp_data(start_time: str, source_filter: str, destination_filter: str, num_h
     df = df.head(num_head)
 
     # Order columns.
-    df = df['time_', 'source', 'destination', 'latency', 'mcp_method',
+    df = df['time_', 'session_id', 'source', 'destination', 'latency', 'mcp_method',
             'mcp_params', 'req_body', 'req_body_size', 'resp_status',
             'resp_message', 'resp_body', 'resp_body_size']
 

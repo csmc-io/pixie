@@ -7,6 +7,12 @@
             "defaultValue": "-5m"
         },
         {
+            "name": "mcp_session_id",
+            "type": "PX_STRING",
+            "description": "The Mcp-Session-Id to filter on. If empty, no filtering is done.",
+            "defaultValue": ""
+        },
+        {
             "name": "source_filter",
             "type": "PX_STRING",
             "description": "The partial string to match the 'source' column.",
@@ -34,6 +40,10 @@
                     {
                         "name": "start_time",
                         "variable": "start_time"
+                    },
+                    {
+                        "name": "mcp_session_id",
+                        "variable": "mcp_session_id"
                     },
                     {
                         "name": "source_filter",
