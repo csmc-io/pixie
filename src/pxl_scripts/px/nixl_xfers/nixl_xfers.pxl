@@ -1,0 +1,6 @@
+import px
+glob = "/home/dev/code/vllm/nixl_xfer.json"
+table = "nixl_xfer.json"
+
+df = px.DataFrame(table)
+px.display(df)
