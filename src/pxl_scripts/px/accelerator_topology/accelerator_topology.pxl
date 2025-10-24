@@ -1,0 +1,12 @@
+import px
+
+def agent_topo():
+    df = px.DataFrame("topology.json")
+    df = df.groupby(['hostname']).agg(
+        gpu0=('gpu0', px.any),
+        gpu1=('gpu1', px.any),
+        hca0=('hca0', px.any),
+        hca1=('hca1', px.any),
+    )
+    return df
+

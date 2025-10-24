@@ -1,0 +1,45 @@
+{
+    "variables": [],
+    "globalFuncs": [
+        {
+            "outputName": "agent_topo",
+            "func": {
+                "name": "agent_topo",
+                "args": []
+            }
+        }
+    ],
+    "widgets": [
+        {
+            "name": "Accelerator Topology",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 4
+            },
+            "globalFuncOutputName": "agent_topo",
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.Graph",
+                "adjacencyLists": [
+                    {
+                        "fromColumn": "hostname",
+                        "toColumn": "gpu0"
+                    },
+                    {
+                        "fromColumn": "hostname",
+                        "toColumn": "gpu1"
+                    },
+                    {
+                        "fromColumn": "hostname",
+                        "toColumn": "hca0"
+                    },
+                    {
+                        "fromColumn": "hostname",
+                        "toColumn": "hca1"
+                    }
+                ]
+            }
+        }
+    ]
+}
