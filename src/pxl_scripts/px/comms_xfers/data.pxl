@@ -1,0 +1,94 @@
+import px
+
+def kv_transfers(start_time: str):
+    ''' Cluster-wide view of KV cache transfers showing prefill to decode traffic.
+    Args:
+    @start_time: The timestamp of data to start at.
+    '''
+    # Get prefill_pod to decode_pod mapping from HTTP events
+    http_df = px.DataFrame(table='http_events', start_time=start_time)
+    http_df.pod = http_df.ctx['pod']
+    http_df.namespace = http_df.ctx['namespace']
+
+    # Extract prefill_host from kv_transfer_params in request body
+    http_df.prefill_host = px.pluck(px.pluck(http_df.req_body, 'kv_transfer_params'), 'remote_host')
+    http_df = http_df[http_df.prefill_host != ""]
+
+    # Convert IPs to pod names
+    http_df.prefill_pod = px.pod_id_to_pod_name(px.ip_to_pod_id(http_df.prefill_host))
+
+    # For server-side traces, destination is the local pod
+    http_df.is_server_tracing = http_df.trace_role == 2
+    http_df.decode_pod = px.select(http_df.is_server_tracing, http_df.pod,
+                                    px.pod_id_to_pod_name(px.ip_to_pod_id(http_df.remote_addr)))
+
+    # Simplified groupby to get prefill_pod/decode_pod mapping
+    http_mapping = http_df.groupby(['prefill_pod', 'decode_pod']).agg(
+        prefill_pod=('prefill_pod', px.any),
+        decode_pod=('decode_pod', px.any)
+    )
+
+    # Get nixl_xfer data
+    df = px.DataFrame('nixl_xfer.json')
+    df.timestamp_ns = px.int64_to_time(df.start_ns)
+    px.debug(df)
+
+    # Merge with process_stats to get pod information
+    procs_df = px.DataFrame('process_stats', start_time=start_time)
+    procs_df.pod = procs_df.ctx['pod']
+    procs_df.namespace = procs_df.ctx['namespace']
+    procs_df.pid = px.upid_to_pid(procs_df.upid)
+
+    merged = df.merge(how='inner', right=procs_df, left_on='pid', right_on='pid')
+
+    # TODO(ddelnano): time_ is set to file_source ingestion time. This is incorrect and
+    # needs to be fixed for a real implementation
+    merged.time_ = merged.time__x
+
+    # Merge with HTTP mapping to get prefill_pod
+    final = merged.merge(how='inner', right=http_mapping, left_on='pod', right_on='decode_pod')
+
+    # Convert xfer_us (microseconds) to ms for latency
+    final.xfer_ms = final.xfer_us / 1000
+
+    # Aggregate by prefill -> decode pod pairs
+    final.success = px.select(final.retval == 0 or final.retval == 1, True, False)
+    px.debug(final)
+    agg = final.groupby(['prefill_pod', 'decode_pod', 'namespace']).agg(
+        transfer_count=('xfer_us', px.count),
+        avg_latency=('xfer_ms', px.mean),
+        p50_latency=('xfer_ms', px.quantiles),
+        p90_latency=('xfer_ms', px.quantiles),
+        p99_latency=('xfer_ms', px.quantiles),
+        total_bytes=('bytes', px.sum),
+        success_count=('success', px.sum),
+    )
+
+    # Extract specific quantiles
+    agg.p50_latency = px.pluck_float64(agg.p50_latency, 'p50')
+    agg.p90_latency = px.pluck_float64(agg.p90_latency, 'p90')
+    agg.p99_latency = px.pluck_float64(agg.p99_latency, 'p99')
+
+    # Compute throughput and error rate
+    window = px.DurationNanos(px.now() - (px.now() + px.parse_duration(start_time)))
+    agg.transfer_throughput = agg.transfer_count / window
+    agg.req_throughput = agg.total_bytes / window
+    agg.resp_throughput = agg.total_bytes / window  # Using same for both directions
+    agg.error_rate = px.Percent((agg.transfer_count - agg.success_count) / agg.transfer_count)
+
+    return agg[[
+        'prefill_pod',
+        'decode_pod',
+        'namespace',
+        'transfer_count',
+        'transfer_throughput',
+        'avg_latency',
+        'p50_latency',
+        'p90_latency',
+        'p99_latency',
+        'req_throughput',
+        'resp_throughput',
+        'total_bytes',
+        'error_rate'
+    ]]
+

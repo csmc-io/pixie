@@ -1,0 +1,43 @@
+{
+    "variables": [
+        {
+            "name": "start_time",
+            "type": "PX_STRING",
+            "description": "The relative start time of the window. Current time is assumed to be now",
+            "defaultValue": "-5m"
+        }
+    ],
+    "widgets": [
+        {
+            "name": "KV Cache Transfers",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 3
+            },
+            "func": {
+                "name": "kv_transfers",
+                "args": [
+                    {
+                        "name": "start_time",
+                        "variable": "start_time"
+                    }
+                ]
+            },
+            "displaySpec": {
+                "@type": "types.px.dev/px.vispb.RequestGraph",
+                "requestorPodColumn": "prefill_pod",
+                "responderPodColumn": "decode_pod",
+                "p50Column": "p50_latency",
+                "p90Column": "p90_latency",
+                "p99Column": "p99_latency",
+                "requestsPerSecondColumn": "transfer_throughput",
+                "inboundBytesPerSecondColumn": "req_throughput",
+                "outboundBytesPerSecondColumn": "resp_throughput",
+                "totalRequestCountColumn": "transfer_count"
+            }
+        }
+    ],
+    "globalFuncs": []
+}
