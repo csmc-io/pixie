@@ -1,6 +1,49 @@
 import px
-glob = "/home/dev/code/vllm/nixl_xfer.json"
+glob = "/home/dev/code/pixie/nixl_xfer.json"
 table = "nixl_xfer.json"
 
+def kv_transfers(start_time: str):
+    ''' Cluster-wide view of KV cache transfers showing prefill to decode traffic.
+    Args:
+    @start_time: The timestamp of data to start at.
+    '''
+    df = px.DataFrame(table='http_events', start_time=start_time)
+
+    # Add context
+    df.pod = df.ctx['pod']
+    df.namespace = df.ctx['namespace']
+
+    # Extract prefill_host from kv_transfer_params in request body
+    df.prefill_host = px.pluck(px.pluck(df.req_body, 'kv_transfer_params'), 'remote_host')
+
+    # Filter to only transfers with kv_transfer_params
+    df = df[df.prefill_host != ""]
+
+    # Convert IPs to pod names
+    df.prefill_pod = px.pod_id_to_pod_name(px.ip_to_pod_id(df.prefill_host))
+
+    # For server-side traces, destination is the local pod
+    df.is_server_tracing = df.trace_role == 2
+    df.decode_pod = px.select(df.is_server_tracing, df.pod,
+                               px.pod_id_to_pod_name(px.ip_to_pod_id(df.remote_addr)))
+    return df.groupby(['prefill_pod', 'decode_pod']).agg(
+        prefill_pod=('prefill_pod', px.any),
+        decode_pod=('decode_pod', px.any)
+    )
+
+http_df = kv_transfers("-5m")
+
+
 df = px.DataFrame(table)
-px.display(df)
+
+procs_df = px.DataFrame('process_stats', start_time='-5m')
+procs_df.pod = procs_df.ctx['pod']
+procs_df.pid = px.upid_to_pid(procs_df.upid)
+
+merged = df.merge(how='inner', right=procs_df, left_on='pid', right_on='pid')
+merged.time_ = merged.time__x
+merged.retval = px.select(merged.retval == 0, "SUCCESS", "Error: " + px.itoa(merged.retval))
+merged.backend_op = px.select(merged.backendOp == 0, "READ", "WRITE")
+final = merged.merge(how='inner', right=http_df, left_on='pod', right_on='decode_pod')
+px.display(final[['time_', 'pod', 'prefill_pod', 'event', 'retval', 'backend_op', 'post_us', 'xfer_us', 'bytes', 'desc']])
+
