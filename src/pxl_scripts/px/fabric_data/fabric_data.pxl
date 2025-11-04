@@ -1,0 +1,5 @@
+import px
+
+df = px.DataFrame("fabric_data.json")
+df = df.drop(['uuid'])
+px.display(df)
