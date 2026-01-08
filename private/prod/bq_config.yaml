@@ -4,8 +4,8 @@ kind: ConfigMap
 metadata:
   name: pl-bq-config
 data:
-  PL_BQ_DISABLED: "true"
-  PL_BQ_PROJECT: "csmc-prod"
+  # An empty bq_project and bq_sa_key_path will disable BigQuery export.
+  PL_BQ_PROJECT: ""
   PL_BQ_DATASET: "pixie_vizier_prod"
   PL_BQ_DATASET_LOC: "us-west1"
-  PL_BQ_SA_KEY_PATH: "/creds/bq.client.default.credentials_file"
+  PL_BQ_SA_KEY_PATH: ""
