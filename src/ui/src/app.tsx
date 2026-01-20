@@ -45,6 +45,7 @@ import { parseJWT } from 'app/utils/jwt';
 import history from 'app/utils/pl-history';
 import { dateToEpoch } from 'app/utils/time';
 import { PixieCookieBanner } from 'configurable/cookie-banner';
+import { TosBanner } from 'configurable/tos-banner';
 
 import 'typeface-roboto';
 import 'typeface-roboto-mono';
@@ -177,6 +178,7 @@ export const App: React.FC = () => {
         </Router>
       </SnackbarProvider>
       <PixieCookieBanner />
+      <TosBanner />
     </ErrorBoundary>
   );
 };
